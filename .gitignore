@@ -1,0 +1,7 @@
+.*.swp
+.*.swo
+.DS_Store
+*.m~
+trash/
+.DS_Store
+*.mex*
