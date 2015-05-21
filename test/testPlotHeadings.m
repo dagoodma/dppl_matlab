@@ -8,12 +8,13 @@ close all;
 
 % Add root
 addpath('..')
+addpath('../lib','../class');
 % Add graph theory toolbox
 if exist('grBase') ~= 2
-    if exist('GrTheory') ~= 7
+    if exist('../lib/GrTheory') ~= 7
         error('Could not find the GrTheory folder.');
     end
-    addpath('GrTheory');
+    addpath('../lib/GrTheory');
 end
 
 %=============== Settings ===============
@@ -29,6 +30,7 @@ opts.Circuit = 'on';
 opts.Debug = 'on';
 opts.MaximizeCost = 'off';
 opts.BruteForce = 'on';
+opts.HeadingArrowSize = 0.2;
 
 if strcmp(opts.Debug, 'on')
     opts
@@ -36,7 +38,7 @@ end
 
 % Plot settings
 arrowSize = 1;
-headingLineSize = 0.2;
+%headingLineSize = 0.2;
 subplotDim = [2 2];
 showEdgeCost = 0;
 
@@ -102,19 +104,18 @@ for k=1:scenarioCount
     end
     %% Point to Point
     %=============== Initial Graph ===============
-    figure('units','normalized','outerposition',[0 0 1 1])
-    %figure()
+    %figure('units','normalized','outerposition',[0 0 1 1])
+    figure()
     titleStr = sprintf('%d WP Scenario', n);
-    hAx = plotWaypoints(V, [], C, subplotDim, 1, arrowSize, titleStr, opts);
+    hAx = plotWaypointScenario(V, [], C, subplotDim, 1, titleStr, opts);
     uicontrol('Style', 'text',...
        'String', sprintf('Point to Point Solutions'),...
        'Units','normalized',...
        'FontSize',15,...
        'BackgroundColor', 'white',...
        'Position', [0.345 0.965 0.29 0.037]);
-    pause(3)
    
-    X = [0 (pi/2+0.01) (pi-0.01)]'
+    X = [0 (pi/2+0.01) (pi-0.01)]' 
     rad2deg(X)
-    plotWaypointHeadings(hAx, V, X, C, headingLineSize, opts);
+    plotWaypointHeadings(hAx, V, X, C, opts);
 end

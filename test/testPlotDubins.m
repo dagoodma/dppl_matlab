@@ -1,13 +1,16 @@
 clear all;
 
-% Add graph theory toolbox
+% Find all dependencies
+% Add root
 addpath('..')
+% Add lib and class folders
+addpath('../lib','../class');
 % Add Dubins plot tool
 if exist('dubins') ~= 3
-    if exist('../DubinsPlot') ~= 7
+    if exist('../lib/DubinsPlot') ~= 7
         error('Could not find the DubinsPlot folder.');
     end
-    addpath('../DubinsPlot');
+    addpath('../lib/DubinsPlot');
     if exist('dubins') ~= 3
         error('Could not find compiled dubins mex file.');
     end

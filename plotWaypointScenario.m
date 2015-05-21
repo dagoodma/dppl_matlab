@@ -109,6 +109,7 @@ else
     end
 end
 hold on;
+fh1 = text(C(1), C(2), '\color{red} Start');
 plot(C(1), C(2), 'ro', 'MarkerFaceColor', 'r');
 title(titleStr);
 box on;

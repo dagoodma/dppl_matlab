@@ -68,23 +68,16 @@ C = [startPosition, startHeading];
 %waypointList = 
 %waypointList = {[3,0; 3,-2]*50}; % 2 WPS
 %waypointList = {[3,0; 5,0; 3,-2]*50}; % 3 WPS
-%waypointList = {[3,0; 5,0; 3,-2; 5,-2 ]*50};
+%waypointList = {[3,0; 5,0; 3,-2; 5,-2 ]*50}; % 4 WPS
+waypointList = {[3,0; 5,0; 7,0; 9,0; 3,-2 ]*50}; % 5 WPS, version 1
+%waypointList = {[3,0; 5,0; 3,-2; 5,-2; 3,-4]*50}; % 5 WPS, version 2
 
 % 2 and 3 WP
 %waypointList = {[3,0; 3,-2]*50,...
 %                 [3,0; 5,0; 3,-2]*50};
 
-% 4 WP, version 1
-%waypointList = {[3,0; 5,0; 3,-2; 5,-2 ]*50};
 
-% 5 WP, version 1
-%waypointList = {[3,0; 5,0; 7,0; 9,0; 3,-2 ]*50};
-
-% 5 WP, version 2
-%waypointList = {[3,0; 5,0; 3,-2; 5,-2; 3,-4]*50};
-
-
-waypointList = {[3,0; 5,0; 7,0; 9,0; 3,-2; 5,-2; 7,-2; 3,-4]*50};
+%waypointList = {[3,0; 5,0; 7,0; 9,0; 3,-2; 5,-2; 7,-2; 3,-4]*50};
 
 % 
 % waypointList = {[3,0; 5,0; 7,0; 3,-2; 5,-2; 3,-4]*50,...
@@ -198,48 +191,48 @@ for k=1:scenarioCount
     plotWaypointDubins(hAx, V, E, X, C, opts);
     
  end
-    %% Line to Line
-    %=============== Initial Graph ===============
-    figure();
-    titleStr = sprintf('%d WP Scenario', n);
-    fig = plotWaypointScenario(V, [], C, subplotDim, 1, titleStr, opts);
-    uicontrol('Style', 'text',...
-       'String', sprintf('Line to Line Solutions'),...
-       'Units','normalized',...
-       'FontSize',15,...
-       'BackgroundColor', 'white',...
-       'Position', [0.345 0.965 0.29 0.037]);
-
-    %=================== Solve ==================
-    % Greedy LTL Solution
-    tic;
-    [E, X, Cost] = solveGreedyLineToLine(C,V,opts);
-    c = Cost(1);
-    
-    elapsedTime = toc;
-
-    if strcmp(opts.Debug,'on')
-        fprintf(['Found greedy LTL solution with a total cost of %.2f in %.2f seconds.\n\n'],...
-            c, elapsedTime);
-    end
-    titleStr = sprintf('Greedy Solution (cost = %.2f)',c);
-    hAx = plotWaypointScenario(V, E, C, subplotDim, 2, titleStr, opts, Cost(2), Cost(3));
-    plotWaypointDubins(hAx, V, E, X, C, opts);
-    
-    % Brute Force LTL Solution
- if strcmp(opts.BruteForce, 'on')
-    tic;
-    [E, X, Cost] = solveBruteforceLineToLine(C,V,opts);
-    c = Cost(1);
-    elapsedTime = toc;
-    
-    if strcmp(opts.Debug,'on')
-        fprintf(['Found brute force LTL solution with a total cost of %.2f in %.2f seconds.\n\n'],...
-            c, elapsedTime);
-    end
-    titleStr = sprintf('Brute force Solution (cost = %.2f)',c);
-    hAx = plotWaypointScenario(V, E, C, subplotDim, 4, titleStr, opts, Cost(2), Cost(3));
-    plotWaypointDubins(hAx, V, E, X, C, opts);
- end
+%     %% Line to Line
+%     %=============== Initial Graph ===============
+%     figure();
+%     titleStr = sprintf('%d WP Scenario', n);
+%     fig = plotWaypointScenario(V, [], C, subplotDim, 1, titleStr, opts);
+%     uicontrol('Style', 'text',...
+%        'String', sprintf('Line to Line Solutions'),...
+%        'Units','normalized',...
+%        'FontSize',15,...
+%        'BackgroundColor', 'white',...
+%        'Position', [0.345 0.965 0.29 0.037]);
+% 
+%     %=================== Solve ==================
+%     % Greedy LTL Solution
+%     tic;
+%     [E, X, Cost] = solveGreedyLineToLine(C,V,opts);
+%     c = Cost(1);
+%     
+%     elapsedTime = toc;
+% 
+%     if strcmp(opts.Debug,'on')
+%         fprintf(['Found greedy LTL solution with a total cost of %.2f in %.2f seconds.\n\n'],...
+%             c, elapsedTime);
+%     end
+%     titleStr = sprintf('Greedy Solution (cost = %.2f)',c);
+%     hAx = plotWaypointScenario(V, E, C, subplotDim, 2, titleStr, opts, Cost(2), Cost(3));
+%     plotWaypointDubins(hAx, V, E, X, C, opts);
+%     
+%     % Brute Force LTL Solution
+%  if strcmp(opts.BruteForce, 'on')
+%     tic;
+%     [E, X, Cost] = solveBruteforceLineToLine(C,V,opts);
+%     c = Cost(1);
+%     elapsedTime = toc;
+%     
+%     if strcmp(opts.Debug,'on')
+%         fprintf(['Found brute force LTL solution with a total cost of %.2f in %.2f seconds.\n\n'],...
+%             c, elapsedTime);
+%     end
+%     titleStr = sprintf('Brute force Solution (cost = %.2f)',c);
+%     hAx = plotWaypointScenario(V, E, C, subplotDim, 4, titleStr, opts, Cost(2), Cost(3));
+%     plotWaypointDubins(hAx, V, E, X, C, opts);
+%  end
 
 end

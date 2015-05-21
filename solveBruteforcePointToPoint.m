@@ -48,11 +48,9 @@ end
 m = n + strcmp(pathOptions.Circuit, 'on');
 
 %================= Solve ===================
-E = zeros(n - 1, 3);
-c = -1;
-c_approach = 0;
-c_return = 0;
+bestCost = -1;
 X = zeros(m, 1);
+V_ordered = V;
 
 P = perms(1:n);
 [permCount, ~] = size(P);
@@ -66,32 +64,26 @@ if strcmp(pathOptions.Debug,'on')
         caseStr, permCount, n);
 end
 
-global ptpPathOptions ptpPathWaypoints ptpPathStartConfig;
-ptpPathOptions = pathOptions;
-ptpPathStartConfig = C;
-
-% fmincon settings
-fminconOptions = optimset('Algorithm', 'interior-point');
-%fminconOptions = optimset('UseParallel', 'always');
-fminconOptions = optimset(fminconOptions, 'Display', 'off');
-
-
-% fmincon constraints (0 <= theta <= 2*pi)
-lb = zeros(m,1);
-ub = ones(m,1) * (2*pi - 0.00001);
+%parpool('local', 4);
 
 for i=1:permCount
     E_i = zeros(n - 1, 3);
-    c_i = 0;
     c_i_approach = 0;
     c_i_return = 0;
     V_i = V(P(i,:)',:);
     
+    % Initial guess for x
+    % improve this with heuristics try alternating algorithm
+    % (shorted euclidean with alternating headings
+    expectedX = initialGuess(C, V_i, pathOptions); 
+    
     % Find minimum cost theta for traversal
-    ptpPathWaypoints = V_i;
-    expectedX = initialGuess(C, V_i, pathOptions);
-    x = fmincon(@solveBruteforcePointToPoint_helper, expectedX, [], [], [], [], ...
-        lb, ub, [], fminconOptions);
+    %ptpPathWaypoints = V_i;
+    
+    %x = fmincon(@solveBruteforcePointToPoint_helper, expectedX, [], [], [], [], ...
+    %    lb, ub, [], fminconOptions);
+    
+    [x_i, fval] = solveBruteforcePointToPoint_helper(C, V_i, pathOptions, expectedX);
     
     % DEBUG Results
     %disp('X: ');
@@ -100,68 +92,24 @@ for i=1:permCount
     %expectedX
     %disp('Error: ');
     %norm(x - expectedX)
-    
-    % Traverse waypoints with minimum theta
-    position = C(1:2);
-    heading = C(3);
-    lastIdx = -1;
-    idx = -1;
-    for j=1:n
-        v = V_i(j,:);
-        theta  = x(j);
-        c_j = findPTPCost(position,heading,v,theta, pathOptions.TurnRadius);
-        c_i = c_i + c_j;
-        
-        % Create an edge
-        lastIdx = idx;
-        idx = findWaypointIndex(V,v);
-        if j > 1
-            E_i(j - 1,:) = [lastIdx idx c_j];
-        else
-            c_i_approach = c_j;
-        end
-        position = v;
-        heading = theta;
-    end % for j
-    
-    % Return cost
-    if strcmp(pathOptions.Circuit, 'on')
-        %theta = findHeadingFrom(position,C(1:2));
-        c_j = findPTPCost(position,heading,C(1:2),x(m), pathOptions.TurnRadius);
-        c_i = c_i + c_j;
-        c_i_return = c_j;
-    end
-    
-    % Remember this traversal if it's min cost
-    if (strcmp(pathOptions.MaximizeCost, 'off') && ((c < 0) || (c_i < c)))...
-        || (strcmp(pathOptions.MaximizeCost, 'on') && ((c < 0) || (c_i > c)))
-        c = c_i;
-        c_approach = c_i_approach;
-        c_return = c_i_return;
-        E = E_i;
-        X = x;
+
+    % Remember this traversal if it's min/max cost
+    fprintf('Comparing fval=%d to bestCost=%d\n',fval, bestCost);
+    if (i == 1 || (fval < bestCost))
+        disp('here!');
+        bestCost = fval;
+        X = x_i;
+        V_ordered = V_i;
     end
     
 end % for i
 
-Cost = [c c_approach c_return];
-
-X = reorderHeadingsFromEdges(V, E, X, pathOptions);
+% Walk mincost path and reconstruc
+[E, Cost] = findTrajectoryCost(C, V, V_ordered, X, pathOptions);
+X = reorderHeadingsFromEdges(V, E, X, pathOptions); % align X with V instead of V_ordered
 
 end % function solveBruteforcePointToPoint
 
-
-%% Find old index of permutated waypoint
-function idx = findWaypointIndex(V, v)
-    idx = -1;
-    [n,~] = size(V);
-    for i=1:n
-        if isequal(V(i,:), v)
-            idx = i;
-            return;
-        end
-    end
-end
 
 %% Iterate through V and find theta between each ordered vertex
 function x = initialGuess(C, V, pathOptions)

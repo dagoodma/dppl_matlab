@@ -2,7 +2,7 @@ clear all;
 close all;
 
 % Add root
-addpath('..')
+addpath('..','../class')
 if exist('findTrajectoryLines') ~= 2
     error('Could not find findTrajectoryLines()');
 end
