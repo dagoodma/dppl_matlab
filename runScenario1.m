@@ -44,7 +44,7 @@ opts.TurnRadius = Va^2/(tan(phi_max)*g); % (m) turn radius for dubins path
 opts.Circuit = 'on';
 opts.Debug = 'on';
 opts.MaximizeCost = 'off';
-opts.BruteForce = 'on';
+opts.BruteForce = 'off';
 
 if strcmp(opts.Debug, 'on')
     opts
@@ -78,13 +78,13 @@ C = [startPosition, startHeading];
 %waypointList = {[3,0; 5,0; 3,-2; 5,-2 ]*50};
 
 % 5 WP, version 1
-%waypointList = {[3,0; 5,0; 7,0; 9,0; 3,-2 ]*50};
+waypointList = {[3,0; 5,0; 7,0; 9,0; 3,-2 ]*50};
 
 % 5 WP, version 2
 %waypointList = {[3,0; 5,0; 3,-2; 5,-2; 3,-4]*50};
 
 
-waypointList = {[3,0; 5,0; 7,0; 9,0; 3,-2; 5,-2; 7,-2; 3,-4]*50};
+%waypointList = {[3,0; 5,0; 7,0; 9,0; 3,-2; 5,-2; 7,-2; 3,-4]*50};
 
 % 
 % waypointList = {[3,0; 5,0; 7,0; 3,-2; 5,-2; 3,-4]*50,...
