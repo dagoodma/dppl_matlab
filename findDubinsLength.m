@@ -11,13 +11,14 @@ function [ length ] = findDubinsLength( p_s, x_s, p_e, x_e, r, debugMode)
 %       length  Length of the path
 %
 DEBUG_VERBOSE = 0;
+debugMode = 0;
 %============= Input Validation ===============
 if nargin < 1
     error('No input arguments given!');
 elseif nargin > 6
     error('Too many arguments given!');
 end
-if (debugMode & strcmpi(debugMode,'off'))
+if (isempty(debugMode) ||  strcmpi(debugMode,'off'))
     debugMode = 0;
 end
 
@@ -34,8 +35,8 @@ if (pdim < 3)
     p_e = [p_e 0]; 
 end
 
-theta_s = heading2Theta(x_s);
-theta_e = heading2Theta(x_e);
+theta_s = heading2Theta(x_s)
+theta_e = heading2Theta(x_e)
 
 % Inline function for right-handed rotation of theta about z-axis
 % TODO be sure we aren't using anonymous functions anywhere. They are slow.
@@ -52,59 +53,59 @@ theta_e = heading2Theta(x_e);
 %c_re = p_e' + r*rotm(pi/2) * [cos(x_e) sin(x_e) 0]';
 %c_le = p_e' + r*rotm(-pi/2) * [cos(x_e) sin(x_e) 0]';
 % 
-c_rs = p_s' + r*[cos(theta_s - pi/2) sin(theta_s - pi/2) 0]';
-c_ls = p_s' + r*[cos(theta_s + pi/2) sin(theta_s + pi/2) 0]';
-c_re = p_e' + r*[cos(theta_e - pi/2) sin(theta_e - pi/2) 0]';
-c_le = p_e' + r*[cos(theta_e + pi/2) sin(theta_e + pi/2) 0]';
+c_rs = p_s' + r*[cos(theta_s - pi/2) sin(theta_s - pi/2) 0]'
+c_ls = p_s' + r*[cos(theta_s + pi/2) sin(theta_s + pi/2) 0]'
+c_re = p_e' + r*[cos(theta_e - pi/2) sin(theta_e - pi/2) 0]'
+c_le = p_e' + r*[cos(theta_e + pi/2) sin(theta_e + pi/2) 0]'
 
 %============ Calculate Lengths ===============
 if (debugMode)
+    figure();
     plotScenario(p_s, x_s, p_e, x_e, c_rs, c_ls, c_re, c_le,r)
 end
 
 % Case I, R-S-R
-theta = findHeadingFrom(c_rs,c_re);
+theta = heading2Theta(findHeadingFrom(c_rs,c_re))
 L1 = norm(c_rs - c_re) + r*wrapTo2Pi(2*pi + wrapTo2Pi(theta - pi/2) - wrapTo2Pi(x_s - pi/2))...
-    + r*wrapTo2Pi(2*pi + wrapTo2Pi(x_e - pi/2) - wrapTo2Pi(theta - pi/2));
-if (debugMode & DEBUG_VERBOSE)
-    L1
-end
+    + r*wrapTo2Pi(2*pi + wrapTo2Pi(x_e - pi/2) - wrapTo2Pi(theta - pi/2))
 
 % Case II, R-S-L
-len = norm(c_le - c_rs);
-theta = findHeadingFrom(c_rs,c_le);
-theta2 = theta - pi/2 + asin((2*r)/len);
+len = norm(c_le - c_rs)
+theta = heading2Theta(findHeadingFrom(c_rs,c_le))
+theta2 = theta - pi/2 + asin((2*r)/len)
 L2 = sqrt(len^2 - 4*r^2)+r*wrapTo2Pi(2*pi + wrapTo2Pi(theta2) - wrapTo2Pi(x_s - pi/2))...
-    + r*wrapTo2Pi(2*pi + wrapTo2Pi(theta2 + pi) - wrapTo2Pi(x_e + pi/2));
-if (debugMode & DEBUG_VERBOSE)
-    L2
-end
+    + r*wrapTo2Pi(2*pi + wrapTo2Pi(theta2 + pi) - wrapTo2Pi(x_e + pi/2))
 
 % Case III, L-S-R
-len = norm(c_re - c_ls);
-theta = findHeadingFrom(c_ls,c_re);
-theta2 = acos((2*r)/len);
+len = norm(c_re - c_ls)
+theta = heading2Theta(findHeadingFrom(c_ls,c_re))
+theta2 = acos((2*r)/len)
 
 if (2*r/len) > 1 || (2*r/len) < -1
     error('Error in case III');
 end
 
 L3 = sqrt(len^2 - 4*r^2) + r*wrapTo2Pi(2*pi + wrapTo2Pi(x_s + pi/2) - wrapTo2Pi(theta + theta2))...
-    + r*wrapTo2Pi(2*pi + wrapTo2Pi(x_e - pi/2) - wrapTo2Pi(theta + theta2 - pi));
-if (debugMode & DEBUG_VERBOSE)
-    L3
-end
+    + r*wrapTo2Pi(2*pi + wrapTo2Pi(x_e - pi/2) - wrapTo2Pi(theta + theta2 - pi))
 
 % Case IV, L-S-L
-theta = findHeadingFrom(c_ls,c_le);
+theta = heading2Theta(findHeadingFrom(c_ls,c_le))
 L4 = norm(c_ls - c_le) + r*wrapTo2Pi(2*pi + wrapTo2Pi(x_s + pi/2) - wrapTo2Pi(theta + pi/2))...
-    + r*wrapTo2Pi(2*pi + wrapTo2Pi(theta + pi/2) - wrapTo2Pi(x_e + pi/2));
-if (debugMode & DEBUG_VERBOSE)
-    L4
-end
+    + r*wrapTo2Pi(2*pi + wrapTo2Pi(theta + pi/2) - wrapTo2Pi(x_e + pi/2))
+
 
 % Return the length of the minimum length Dubins path
 length = min([L1, L2, L3, L4]);
+
+%if (debugMode & DEBUG_VERBOSE)
+    fprintf('Given [%0.1f, %0.1f, %0.1f] to [%0.1f, %0.1f, %0.1f],\n',...
+        p_s(1), p_s(2), x_s, p_e(1), p_e(2), x_e);
+    fprintf('L1=%0.2f, L2=%0.2f, L3=%0.2f, L4=%0.2f\n', L1, L2, L3, L4);
+    
+    fprintf('Shortest Dubins path with r %.2f has cost %0.2f\n',...
+        r, length);
+%end
+
 
 end
 
@@ -150,6 +151,8 @@ ylim([yl(1) - yld*0.1, yl(2) + maxDimLen*0.1]);
 % Plot headings
 hAx = gca;
 scatter([p_s(1) p_e(1)], [p_s(2) p_e(2)], 'r');
+p_s(1:2)
+x_s
 drawHeadingArrow(hAx, p_s(1:2), x_s, r/3, 'b');
 drawHeadingArrow(hAx, p_e(1:2), x_e, r/3, 'b');
 
