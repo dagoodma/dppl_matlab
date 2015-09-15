@@ -3,12 +3,14 @@ close all;
 
 % Add root
 addpath('..')
+addpath('../lib');
+addpath('../class');
 % Add Dubins plot tool
 if exist('dubins') ~= 3
-    if exist('../DubinsPlot') ~= 7
+    if exist('../lib/DubinsPlot') ~= 7
         error('Could not find the DubinsPlot folder.');
     end
-    addpath('../DubinsPlot');
+    addpath('../lib/DubinsPlot');
     if exist('dubins') ~= 3
         error('Could not find compiled dubins mex file.');
     end
@@ -33,7 +35,7 @@ opts.HeadingArrowSize = 0.7;
 opts.Debug = 'on';
 %=============== Tests ===============
 fprintf('\n');
-figure();
+fh = figure();
 testsPassed = 0;
 totalTests = 4;
 
@@ -54,6 +56,7 @@ plot([startPosition(1) endPosition(1)], [startPosition(2) endPosition(2)],...
     'ko', 'MarkerFaceColor', 'k')
 L =  findDubinsLength(startPosition, startHeading, endPosition, endHeading,...
     opts.TurnRadius, opts.Debug);
+set(0,'currentFigure',fh)
 hold on;
 plot(path(1,1:end), path(2,1:end), 'Color', 'g');
 title('Case I: R-S-R');
@@ -95,6 +98,7 @@ plot([startPosition(1) endPosition(1)], [startPosition(2) endPosition(2)],...
     'ko', 'MarkerFaceColor', 'k')
 L =  findDubinsLength(startPosition, startHeading, endPosition, endHeading,...
     opts.TurnRadius, opts.Debug);
+set(0,'currentFigure',fh)
 hold on;
 plot(path(1,1:end), path(2,1:end), 'Color', 'g');
 title('Case II: R-S-L');
@@ -136,6 +140,7 @@ plot([startPosition(1) endPosition(1)], [startPosition(2) endPosition(2)],...
     'ko', 'MarkerFaceColor', 'k')
 L =  findDubinsLength(startPosition, startHeading, endPosition, endHeading,...
     opts.TurnRadius, opts.Debug);
+set(0,'currentFigure',fh)
 hold on;
 plot(path(1,1:end), path(2,1:end), 'Color', 'g');
 title('Case III: L-S-R');
@@ -179,6 +184,7 @@ plot([startPosition(1) endPosition(1)], [startPosition(2) endPosition(2)],...
 L =  findDubinsLength(startPosition, startHeading, endPosition, endHeading,...
     opts.TurnRadius, opts.Debug);
 hold on;
+set(0,'currentFigure',fh)
 plot(path(1,1:end), path(2,1:end), 'Color', 'g');
 title('Case IV: L-S-L');
 yl = ylim();
