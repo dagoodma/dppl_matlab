@@ -1,4 +1,4 @@
-function [fig] = plotWaypointHeadings(hAx, V, X, C, pathOptions)
+function [fig] = plotWaypointHeadings(hAx, V, X, pathOptions)
 % PLOTWAYPOINTHEADINGS plots waypoint headings on top of current figure
 %   Called after plotWaypointScenario to plot headings X on top of
 %   waypoints.
@@ -6,9 +6,7 @@ function [fig] = plotWaypointHeadings(hAx, V, X, C, pathOptions)
 % Input parameters:
 %   hAx - axes handle to plot onto
 %   V(n,2) - an n-by-2 matrix of vertice coordinates
-%   X(m,1) - an m-by-1 vector of headings for each vertex
-%   C(1,3) - a 1-by-3 vector that holds the starting configuration
-%            C(1:2) is the (x,y) position, and C(3) is the heading
+%   X(n,1) - an n-by-1 vector of headings for each vertex
 %   pathOptions - optional path options object. use default if not given
 %
 
@@ -28,20 +26,14 @@ end
 if isempty(X)
     error ('X is empty');
 end
-if isempty(C)
-    error('C is empty!');
-end
 
 [n, ~] = size(V);
-[m, ~] = size(X);
+[nX, ~] = size(X);
 
-if (n ~= (m - strcmp(pathOptions.Circuit, 'on')))
-    error('X dimensions not compatible with V');
+if (n ~= nX)
+    error('X dimensions do not match V');
 end
 
-if (length(C) ~= 3)
-    error ('C should have 3 components');
-end
 if ~exist('pathOptions','var')
     pathOptions = PathOptions;
 end
@@ -66,17 +58,17 @@ end
 
 % ====================== Plot Headings =========================
 % Plot starting heading
-drawHeadingArrow(hAx, C(1:2), C(3), pathOptions.HeadingArrowSize, START_HEADING_COLOR)
+%drawHeadingArrow(hAx, C(1:2), C(3), pathOptions.HeadingArrowSize, START_HEADING_COLOR)
 
 % Plot WP headings
 for i=1:n
    drawHeadingArrow(hAx, V(i,:), X(i), pathOptions.HeadingArrowSize, HEADING_COLOR)
 end
 
-% Plot return heading (if set)
-if m > n
-    drawHeadingArrow(hAx, C(1:2), X(m), pathOptions.HeadingArrowSize, HEADING_COLOR)
-end
+% % Plot return heading (if set)
+% if m > n
+%     drawHeadingArrow(hAx, C(1:2), X(m), pathOptions.HeadingArrowSize, HEADING_COLOR)
+% end
 
 
 end % function plotWaypointHeadings
