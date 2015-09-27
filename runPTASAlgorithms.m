@@ -38,7 +38,7 @@ Va = 10; % (m/s) fixed airspeed
 phi_max = degtorad(45); % (rad) maximum bank angle (+ and -)
 g = 9.8; %(m/s^2)
 
-USE_CPP_SOLVER = 0;
+USE_CPP_SOLVER = 1;
 
 % Path options
 opts = PathOptions;
@@ -82,11 +82,14 @@ C = [startPosition, startHeading];
 %waypointList = {[3,0; 5,0; 3,-2; 5,-2 ]*50};
 
 % 5 WP, version 1
-waypointList = {[3,0; 5,0; 7,0; 9,0; 3,-2 ]*50};
+%waypointList = {[3,0; 5,0; 7,0; 9,0; 3,-2 ]*50};
 
 % 5 WP, version 2
 %waypointList = {[3,0; 5,0; 3,-2; 5,-2; 3,-4]*50};
 
+
+%waypointList = {[3,0; 5,0; 7,0; 9,0; 12,0; 3,-2; 5,-2; 7,-2; 9, -2; 3,-4; 5,-4;]*50};
+waypointList = {[3,0; 5,0; 7,0; 9,0; 11,0; 3,-2; 5,-2; 7,-2; 9, -2; 3,-4; 5,-4;]*50};
 
 %waypointList = {[3,0; 5,0; 7,0; 9,0; 3,-2; 5,-2; 7,-2; 3,-4]*50};
 
@@ -120,14 +123,13 @@ for k=1:scenarioCount
 
     V = waypointList{k};
     sortrows(V,[-2 1]); % sort by y descending, then by x ascending
-    V
     [n, ~] = size(V);
     
     % Add start position
     V = [startPosition; V];
 
     if strcmp(opts.Debug, 'on')
-        fprintf('## Solving scenario with %d waypoints...\n\n',...
+        fprintf('## Testing scenario with %d waypoints...\n\n',...
             n);
     end
     
@@ -146,15 +148,15 @@ for k=1:scenarioCount
    
     % Run solvers
     % Call MATLAB solver
+    fprintf('Running Nearest Neighbor (MATLAB) Greedy PTP solver...\n');
     tic;
     [E, X, Cost] = solveGreedyPointToPoint(V,startHeading,opts);
     elapsedTime = toc;
     c = Cost;
-    E
-    vertexOrder = getVertexOrder(E)
+    vertexOrder = getVertexOrder(E);
 
     if strcmp(opts.Debug,'on')
-        fprintf(['Found greedy PTP solution with a total cost of %.2f in %.2f seconds.\n\n'],...
+        fprintf(['Found nearest neighbor solution with a total cost of %.2f in %.2f seconds.\n\n'],...
             c, elapsedTime);
     end
     titleStr = sprintf('Nearest Neighbor MATLAB (cost = %.2f)',c);
@@ -163,12 +165,14 @@ for k=1:scenarioCount
     
     % Call CPP solver
   if USE_CPP_SOLVER
+    fprintf('Running Nearest Neighbor (CPP) solver...\n');
     tic;
-    [E, X, Cost] = solveNearestNeighborCPP(V,startHeading,opts);
+    [E, X, Cost] = solveNearestNeighborCPP(V,startHeading,opts)
+    %[E, X, Cost] = solveAlternatingCPP(V,startHeading,opts)
+    
     elapsedTime = toc;
     c = Cost;
-    E
-    vertexOrder = getVertexOrder(E)
+    vertexOrder = getVertexOrder(E);
 
     if strcmp(opts.Debug,'on')
         fprintf(['Found Nearest Neighbor CPP solution with a total cost of %.2f in %.2f seconds.\n\n'],...
@@ -178,6 +182,29 @@ for k=1:scenarioCount
     hAx = plotWaypointScenario(V, E, subplotDim, 3, titleStr, opts);
     plotWaypointDubins(hAx, V, E, X, opts); 
   end
+  
+   % ============== Alternating Algorithm (DTSP) ======================
+    
+   % Call CPP solver
+  if USE_CPP_SOLVER
+    fprintf('Running Alternating Algorithm (CPP) solver...\n');
+    tic;
+    [E, X, Cost] = solveAlternatingCPP(V,startHeading,opts)
+    %[E, X, Cost] = solveAlternatingCPP(V,startHeading,opts)
+    
+    elapsedTime = toc;
+    c = Cost;
+    vertexOrder = getVertexOrder(E);
+
+    if strcmp(opts.Debug,'on')
+        fprintf(['Found Alternating Algorithm CPP solution with a total cost of %.2f in %.2f seconds.\n\n'],...
+            c, elapsedTime);
+    end
+    titleStr = sprintf('Alternating CPP (cost = %.2f)',c);
+    hAx = plotWaypointScenario(V, E, subplotDim, 4, titleStr, opts);
+    plotWaypointDubins(hAx, V, E, X, opts); 
+  end
+  
     
 %     % Brute force PTP Solution
 %  if strcmp(opts.BruteForce, 'on')
