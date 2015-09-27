@@ -36,7 +36,18 @@ if dimc ~= 2
     error('Expected V to have 2 columns');
 end
 
-[m, ~] = size(E);
+[m, dimc] = size(E);
+
+%E
+%m
+%dimc
+%if dimc < 2
+%    error('Expected E to have at least 2 columns');
+%end
+
+%if strcmp(pathOptions.ShowEdgeCosts,'on') && dimc < 3
+%    error('Expected E to have 3 columns for showEdgeCosts option.');
+%end
 
 if isempty(subPlotDim)
     error('subPlotDim is empty!');
@@ -51,6 +62,7 @@ end
 if ~exist('pathOptions','var')
     pathOptions = PathOptions;
 end
+
 
 % 
 % %========= Rebuild V and E to include starting configuration ===========

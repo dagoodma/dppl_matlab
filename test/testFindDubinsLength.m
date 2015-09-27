@@ -27,9 +27,12 @@ Va = 10; % (m/s) fixed airspeed
 phi_max = degtorad(45); % (rad) maximum bank angle (+ and -)
 g = 9.8; %(m/s^2)
 
+r = 1;
+
 % Path options
 opts = PathOptions;
-opts.TurnRadius = Va^2/(tan(phi_max)*g); % (m) turn radius for dubins path
+%opts.TurnRadius = Va^2/(tan(phi_max)*g); % (m) turn radius for dubins path
+opts.TurnRadius = r;
 opts.DubinsStepSize = 0.01; % [sec]
 opts.HeadingArrowSize = 0.7;
 opts.Debug = 'on';
@@ -45,9 +48,10 @@ subplot(2,2,1);
 % Position
 startPosition = [0 0];
 startHeading = 0; % radians
-q0 = [startPosition heading2Theta(startHeading)];
-endPosition = [50 0];
+endPosition = [5 0];
 endHeading = deg2rad(180); % radians
+
+q0 = [startPosition heading2Theta(startHeading)];
 q1 = [endPosition heading2Theta(endHeading)];
 
 % Plotting
@@ -55,13 +59,13 @@ path = dubins(q0, q1, opts.TurnRadius, opts.DubinsStepSize);
 plot([startPosition(1) endPosition(1)], [startPosition(2) endPosition(2)],...
     'ko', 'MarkerFaceColor', 'k')
 L =  findDubinsLength(startPosition, startHeading, endPosition, endHeading,...
-    opts.TurnRadius, opts.Debug);
+    opts.TurnRadius, 1);
 set(0,'currentFigure',fh)
 hold on;
 plot(path(1,1:end), path(2,1:end), 'Color', 'g');
 title('Case I: R-S-R');
 yl = ylim();
-text(0,yl(1)+5,sprintf('L = %.2f',L));
+%text(0,yl(1)+5,sprintf('L = %.2f',L));
 
 % Count length of path from DubinsPlot tool
 Lexpected = 0;
@@ -87,9 +91,10 @@ subplot(2,2,2);
 % Position
 startPosition = [0 0];
 startHeading = deg2rad(37); % radians
-q0 = [startPosition heading2Theta(startHeading)];
-endPosition = [52.7 -13];
+endPosition = [5.27*r -1.3*r];
 endHeading = deg2rad(340); % radians
+
+q0 = [startPosition heading2Theta(startHeading)];
 q1 = [endPosition heading2Theta(endHeading)];
 
 % Plotting
@@ -97,13 +102,13 @@ path = dubins(q0, q1, opts.TurnRadius, opts.DubinsStepSize);
 plot([startPosition(1) endPosition(1)], [startPosition(2) endPosition(2)],...
     'ko', 'MarkerFaceColor', 'k')
 L =  findDubinsLength(startPosition, startHeading, endPosition, endHeading,...
-    opts.TurnRadius, opts.Debug);
+    opts.TurnRadius, 1);
 set(0,'currentFigure',fh)
 hold on;
 plot(path(1,1:end), path(2,1:end), 'Color', 'g');
 title('Case II: R-S-L');
 yl = ylim();
-text(0,yl(1)+5,sprintf('L = %.2f',L));
+%text(0,yl(1)+5,sprintf('L = %.2f',L));
 
 % Count length of path from DubinsPlot tool
 Lexpected = 0;
@@ -115,7 +120,7 @@ end % for
 % Results
 result = L;
 resultExpected = Lexpected;
-fprintf('Case I (R-S-L): L = %.2f',result);
+fprintf('Case II (R-S-L): L = %.2f',result);
 if (abs(result - resultExpected) > EPSILON_ERROR)
     fprintf('\t-- FAILED: expected %.2f\n',resultExpected);
 else
@@ -129,9 +134,9 @@ subplot(2,2,3);
 % Position
 startPosition = [0 0];
 startHeading = deg2rad(245); % radians
-q0 = [startPosition heading2Theta(startHeading)];
-endPosition = [52.7 -13];
+endPosition = [5.27*r -1.3*r];
 endHeading = deg2rad(165); % radians
+q0 = [startPosition heading2Theta(startHeading)];
 q1 = [endPosition heading2Theta(endHeading)];
 
 % Plotting
@@ -139,13 +144,13 @@ path = dubins(q0, q1, opts.TurnRadius, opts.DubinsStepSize);
 plot([startPosition(1) endPosition(1)], [startPosition(2) endPosition(2)],...
     'ko', 'MarkerFaceColor', 'k')
 L =  findDubinsLength(startPosition, startHeading, endPosition, endHeading,...
-    opts.TurnRadius, opts.Debug);
+    opts.TurnRadius, 1);
 set(0,'currentFigure',fh)
 hold on;
 plot(path(1,1:end), path(2,1:end), 'Color', 'g');
 title('Case III: L-S-R');
 yl = ylim();
-text(0,yl(1)+5,sprintf('L = %.2f',L));
+%text(0,yl(1)+5,sprintf('L = %.2f',L));
 
 % Count length of path from DubinsPlot tool
 Lexpected = 0;
@@ -157,7 +162,7 @@ end % for
 % Results
 result = L;
 resultExpected = Lexpected;
-fprintf('Case I (L-S-R): L = %.2f',result);
+fprintf('Case III (L-S-R): L = %.2f',result);
 if (abs(result - resultExpected) > EPSILON_ERROR)
     fprintf('\t-- FAILED: expected %.2f\n',resultExpected);
 else
@@ -172,9 +177,9 @@ subplot(2,2,4);
 % Position
 startPosition = [0 0];
 startHeading = deg2rad(170); % radians
-q0 = [startPosition heading2Theta(startHeading)];
-endPosition = [52.7 -13];
+endPosition = [5.27*r -1.3*r];
 endHeading = deg2rad(315); % radians
+q0 = [startPosition heading2Theta(startHeading)];
 q1 = [endPosition heading2Theta(endHeading)];
 
 % Plotting
@@ -182,13 +187,13 @@ path = dubins(q0, q1, opts.TurnRadius, opts.DubinsStepSize);
 plot([startPosition(1) endPosition(1)], [startPosition(2) endPosition(2)],...
     'ko', 'MarkerFaceColor', 'k')
 L =  findDubinsLength(startPosition, startHeading, endPosition, endHeading,...
-    opts.TurnRadius, opts.Debug);
+    opts.TurnRadius, 1);
 hold on;
 set(0,'currentFigure',fh)
 plot(path(1,1:end), path(2,1:end), 'Color', 'g');
 title('Case IV: L-S-L');
 yl = ylim();
-text(0,yl(1)+5,sprintf('L = %.2f',L));
+%text(0,yl(1)+5,sprintf('L = %.2f',L));
 
 % Count length of path from DubinsPlot tool
 Lexpected = 0;
@@ -200,7 +205,7 @@ end % for
 % Results
 result = L;
 resultExpected = Lexpected;
-fprintf('Case I (L-S-L): L = %.2f',result);
+fprintf('Case IV (L-S-L): L = %.2f',result);
 if (abs(result - resultExpected) > EPSILON_ERROR)
     fprintf('\t-- FAILED: expected %.2f\n',resultExpected);
 else

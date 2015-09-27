@@ -1,4 +1,4 @@
-function [ length ] = findDubinsLength( p_s, x_s, p_e, x_e, r, debugMode)
+function [ length ] = findDubinsLength( p_s, x_s, p_e, x_e, r, createPlot)
 %FINDDUBINSLENGTH Find the length of the shortest Dubins path
 %   Parameters:
 %       p_s     Start position as a 1-by-2 matrix
@@ -6,20 +6,21 @@ function [ length ] = findDubinsLength( p_s, x_s, p_e, x_e, r, debugMode)
 %       p_e     End position as a 1-by-2 matrix
 %       x_e     End angle in radians
 %       r       Turn radius
-%       debugMode   Plots Dubins circles TODO plot course
+%       createPlot  Optional argument to draw a plot of the scenario
 %   Returns:
 %       length  Length of the path
 %
-DEBUG_VERBOSE = 0;
-debugMode = 0;
+DUBINS_DEBUG = 0;
+DEBUG_VERBOSE = 0; % plots dubins trajectories
 %============= Input Validation ===============
 if nargin < 1
     error('No input arguments given!');
 elseif nargin > 6
     error('Too many arguments given!');
 end
-if (isempty(debugMode) ||  strcmpi(debugMode,'off'))
-    debugMode = 0;
+
+if nargin < 6
+    createPlot = 0;
 end
 
 if norm(p_s - p_e) < 3*r
@@ -35,8 +36,8 @@ if (pdim < 3)
     p_e = [p_e 0]; 
 end
 
-theta_s = heading2Theta(x_s)
-theta_e = heading2Theta(x_e)
+theta_s = heading2Theta(x_s);
+theta_e = heading2Theta(x_e);
 
 % Inline function for right-handed rotation of theta about z-axis
 % TODO be sure we aren't using anonymous functions anywhere. They are slow.
@@ -53,65 +54,76 @@ theta_e = heading2Theta(x_e)
 %c_re = p_e' + r*rotm(pi/2) * [cos(x_e) sin(x_e) 0]';
 %c_le = p_e' + r*rotm(-pi/2) * [cos(x_e) sin(x_e) 0]';
 % 
-c_rs = p_s' + r*[cos(theta_s - pi/2) sin(theta_s - pi/2) 0]'
-c_ls = p_s' + r*[cos(theta_s + pi/2) sin(theta_s + pi/2) 0]'
-c_re = p_e' + r*[cos(theta_e - pi/2) sin(theta_e - pi/2) 0]'
-c_le = p_e' + r*[cos(theta_e + pi/2) sin(theta_e + pi/2) 0]'
+c_rs = p_s' + r*[cos(theta_s - pi/2) sin(theta_s - pi/2) 0]';
+c_ls = p_s' + r*[cos(theta_s + pi/2) sin(theta_s + pi/2) 0]';
+c_re = p_e' + r*[cos(theta_e - pi/2) sin(theta_e - pi/2) 0]';
+c_le = p_e' + r*[cos(theta_e + pi/2) sin(theta_e + pi/2) 0]';
+
+% Should be this:
+%c_rs = p_s' + r*[cos(x_s + pi/2) sin(x_s + pi/2) 0]';
+%c_ls = p_s' + r*[cos(x_s - pi/2) sin(x_s - pi/2) 0]';
+%c_re = p_e' + r*[cos(x_e + pi/2) sin(x_e + pi/2) 0]';
+%c_le = p_e' + r*[cos(x_e - pi/2) sin(x_e - pi/2) 0]';
+
 
 %============ Calculate Lengths ===============
-if (debugMode)
-    figure();
+if (DUBINS_DEBUG & DEBUG_VERBOSE)
+    c_rs, c_ls, c_re, c_le
+end
+if createPlot
     plotScenario(p_s, x_s, p_e, x_e, c_rs, c_ls, c_re, c_le,r)
 end
 
 % Case I, R-S-R
-theta = heading2Theta(findHeadingFrom(c_rs,c_re))
+theta = findHeadingFrom(c_rs,c_re);
 L1 = norm(c_rs - c_re) + r*wrapTo2Pi(2*pi + wrapTo2Pi(theta - pi/2) - wrapTo2Pi(x_s - pi/2))...
-    + r*wrapTo2Pi(2*pi + wrapTo2Pi(x_e - pi/2) - wrapTo2Pi(theta - pi/2))
+    + r*wrapTo2Pi(2*pi + wrapTo2Pi(x_e - pi/2) - wrapTo2Pi(theta - pi/2));
+if (DUBINS_DEBUG & DEBUG_VERBOSE)
+    theta
+    L1
+end
 
 % Case II, R-S-L
-len = norm(c_le - c_rs)
-theta = heading2Theta(findHeadingFrom(c_rs,c_le))
-theta2 = theta - pi/2 + asin((2*r)/len)
+len = norm(c_le - c_rs);
+theta = findHeadingFrom(c_rs,c_le);
+theta2 = theta - pi/2 + asin((2*r)/len);
 L2 = sqrt(len^2 - 4*r^2)+r*wrapTo2Pi(2*pi + wrapTo2Pi(theta2) - wrapTo2Pi(x_s - pi/2))...
-    + r*wrapTo2Pi(2*pi + wrapTo2Pi(theta2 + pi) - wrapTo2Pi(x_e + pi/2))
+    + r*wrapTo2Pi(2*pi + wrapTo2Pi(theta2 + pi) - wrapTo2Pi(x_e + pi/2));
+if (DUBINS_DEBUG & DEBUG_VERBOSE)
+    L2
+end
 
 % Case III, L-S-R
-len = norm(c_re - c_ls)
-theta = heading2Theta(findHeadingFrom(c_ls,c_re))
-theta2 = acos((2*r)/len)
+len = norm(c_re - c_ls);
+theta = findHeadingFrom(c_ls,c_re);
+theta2 = acos((2*r)/len);
 
 if (2*r/len) > 1 || (2*r/len) < -1
     error('Error in case III');
 end
 
 L3 = sqrt(len^2 - 4*r^2) + r*wrapTo2Pi(2*pi + wrapTo2Pi(x_s + pi/2) - wrapTo2Pi(theta + theta2))...
-    + r*wrapTo2Pi(2*pi + wrapTo2Pi(x_e - pi/2) - wrapTo2Pi(theta + theta2 - pi))
+    + r*wrapTo2Pi(2*pi + wrapTo2Pi(x_e - pi/2) - wrapTo2Pi(theta + theta2 - pi));
+if (DUBINS_DEBUG & DEBUG_VERBOSE)
+    L3
+end
 
 % Case IV, L-S-L
-theta = heading2Theta(findHeadingFrom(c_ls,c_le))
+theta = findHeadingFrom(c_ls,c_le);
 L4 = norm(c_ls - c_le) + r*wrapTo2Pi(2*pi + wrapTo2Pi(x_s + pi/2) - wrapTo2Pi(theta + pi/2))...
-    + r*wrapTo2Pi(2*pi + wrapTo2Pi(theta + pi/2) - wrapTo2Pi(x_e + pi/2))
-
+    + r*wrapTo2Pi(2*pi + wrapTo2Pi(theta + pi/2) - wrapTo2Pi(x_e + pi/2));
+if (DUBINS_DEBUG & DEBUG_VERBOSE)
+    L4
+end
 
 % Return the length of the minimum length Dubins path
 length = min([L1, L2, L3, L4]);
-
-%if (debugMode & DEBUG_VERBOSE)
-    fprintf('Given [%0.1f, %0.1f, %0.1f] to [%0.1f, %0.1f, %0.1f],\n',...
-        p_s(1), p_s(2), x_s, p_e(1), p_e(2), x_e);
-    fprintf('L1=%0.2f, L2=%0.2f, L3=%0.2f, L4=%0.2f\n', L1, L2, L3, L4);
-    
-    fprintf('Shortest Dubins path with r %.2f has cost %0.2f\n',...
-        r, length);
-%end
-
 
 end
 
 
 %% 
-function plotCircle(x,y,r)
+function plotCircle(x,y,r,args)
 %x and y are the coordinates of the center of the circle
 %r is the radius of the circle
 %0.01 is the angle step, bigger values will draw the circle faster but
@@ -119,7 +131,10 @@ function plotCircle(x,y,r)
 ang=0:0.01:2*pi; 
 xp=r*cos(ang);
 yp=r*sin(ang);
-plot(x+xp,y+yp);
+if ~iscell(args)
+    args = {[args]};
+end
+plot(x+xp,y+yp,args{:});
 end
 
 %%
@@ -130,10 +145,11 @@ hold on;
 %scatter([c_s(1) c_e(1)],[c_s(2) c_e(2)],'r+');
 %plot([c_s(1) c_e(1)],[c_s(2) c_e(2)],'k--');
 % Plot circles
-plotCircle(c_rs(1), c_rs(2), r);
-plotCircle(c_re(1), c_re(2), r);
-plotCircle(c_ls(1), c_ls(2), r);
-plotCircle(c_le(1), c_le(2), r);
+formatArgs={':k','LineWidth',0.005};
+plotCircle(c_rs(1), c_rs(2), r, formatArgs);
+plotCircle(c_re(1), c_re(2), r, formatArgs);
+plotCircle(c_ls(1), c_ls(2), r, formatArgs);
+plotCircle(c_le(1), c_le(2), r, formatArgs);
 text(c_rs(1), c_rs(2), 'c_{rs}', 'FontSize', 12);
 text(c_re(1), c_re(2), 'c_{re}', 'FontSize', 12);
 text(c_ls(1), c_ls(2), 'c_{ls}', 'FontSize', 12);
@@ -151,8 +167,6 @@ ylim([yl(1) - yld*0.1, yl(2) + maxDimLen*0.1]);
 % Plot headings
 hAx = gca;
 scatter([p_s(1) p_e(1)], [p_s(2) p_e(2)], 'r');
-p_s(1:2)
-x_s
 drawHeadingArrow(hAx, p_s(1:2), x_s, r/3, 'b');
 drawHeadingArrow(hAx, p_e(1:2), x_e, r/3, 'b');
 
@@ -163,5 +177,4 @@ end
 function M = rotm(theta)
 M = [cos(theta) sin(theta) 0; -sin(theta) cos(theta) 0; 0 0 1]';
 end
-
 

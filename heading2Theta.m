@@ -16,4 +16,10 @@ theta = mod(-(psi - pi/2),2*pi);
 
 end %% function heading2Theta()
 
+%Note mod is actually:
+%
+%function [m] = myMod(x,y)
+%   n = floor(x./y);
+%   m = x - n.*y;
+%end
 

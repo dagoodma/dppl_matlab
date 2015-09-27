@@ -9,6 +9,6 @@ elseif nargin > 5
     error('Too many arguments given!');
 end
 
-cost = findDubinsLength(p1, x1, p2, x2, r, 0);
+cost = findDubinsLength(p1, x1, p2, x2, r);
 
 end  % function findPTPCost

@@ -28,10 +28,11 @@ if isempty(X)
 end
 
 [n, ~] = size(V);
-[nX, ~] = size(X);
+nX = length(X);
+%[nX, ~] = size(X);
 
 if (n ~= nX)
-    error('X dimensions do not match V');
+    error(sprintf('X (%d) dimensions should match V (%d)',nX,n));
 end
 
 if ~exist('pathOptions','var')

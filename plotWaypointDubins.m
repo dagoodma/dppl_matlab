@@ -28,8 +28,6 @@ end
 
 [n, ~] = size(V);
 [m, ~] = size(E);
-fprintf ('n = %i\n', n);
-fprintf ('m = %i\n', m);
 
 if (n ~= length(X))
     error('Length of V and X do not match');
@@ -65,7 +63,7 @@ heading = X(1);
 C_total = 0;
 
 if strcmp(pathOptions.Debug,'on')
-    vertexOrder = order
+    vertexOrder = order;
 end
 
 for i=2:(m+1)
@@ -89,7 +87,7 @@ for i=2:(m+1)
             c  = c + c_i;
         end % for
         C_total = C_total + c;
-        fprintf('Cost of leg (%i,%i) is %0.2f\n', order(i-1), vi, c);
+        %fprintf('Cost of leg (%i,%i) is %0.2f\n', order(i-1), vi, c);
     end
     
     % Update position

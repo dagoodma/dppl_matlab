@@ -9,22 +9,22 @@ elseif nargin > 2
 end
 
 %============== Finding Angle ==================
-p1_x = p1(1);
-p1_y = p1(2);
-p2_x = p2(1);
-p2_y = p2(2);
+x1 = p1(1);
+y1 = p1(2);
+x2 = p2(1);
+y2 = p2(2);
 
 % Calculate angle of line between p1 and p2
-if (p1_x <= p2_x) && (p1_y < p2_y)
-    psi = atan((p2_x - p1_x)/(p2_y - p1_y));
-elseif (p1_x < p2_x) && (p1_y >= p2_y)
-    psi = atan((p1_y - p2_y)/(p2_x - p1_x)) + pi/2;
-elseif (p2_x <= p1_x) && (p2_y < p1_y)
-    psi = atan((p1_x - p2_x)/(p1_y - p2_y)) + pi;
-elseif (p2_x < p1_x) && (p1_y <= p2_y)
-    psi = atan((p2_y - p1_y)/(p1_x - p2_x)) + 3*pi/2;
+if (x1 <= x2) && (y1 < y2)
+    psi = atan((x2 - x1)/(y2 - y1));
+elseif (x1 < x2) && (y1 >= y2)
+    psi = atan((y1 - y2)/(x2 - x1)) + pi/2;
+elseif (x2 <= x1) && (y2 < y1)
+    psi = atan((x1 - x2)/(y1 - y2)) + pi;
+elseif (x2 < x1) && (y1 <= y2)
+    psi = atan((y2 - y1)/(x1 - x2)) + 3*pi/2;
 else
-    error('Unhandled case for p1=[%d %d] and p2=[%d %d].',p1_x,p1_y,p2_x,p2_y);
+    error('Unhandled case for p1=[%d %d] and p2=[%d %d].',x1,y1,x2,y2);
 end
 
 end % function

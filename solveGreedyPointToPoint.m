@@ -86,8 +86,8 @@ for i=2:n
     V_visited(idx) = 1;
     X(idx) = theta_i;
     
-    fprintf('Chose leg (%i,%i) with cost %0.2f and final heading %0.2f\n',...
-        lastIdx, idx, c_i, theta_i);
+    %fprintf('Chose leg (%i,%i) with cost %0.2f and final heading %0.2f\n',...
+    %    lastIdx, idx, c_i, theta_i);
     
     % Build an edge
     E(i-1,:) = [lastIdx idx c_i];

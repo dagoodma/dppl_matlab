@@ -77,7 +77,7 @@ for i=1:k
         vertexIndex = line.getNext();
         v = V(vertexIndex,:);
         c_i = findDubinsLength(position, heading, v, line.Heading,...
-            pathOptions.TurnRadius, 0);
+            pathOptions.TurnRadius);
         c_i = sqrt( (position(1) - v(1))^2 + (position(2) - v(2))^2 )
         c = c + c_i;
         
