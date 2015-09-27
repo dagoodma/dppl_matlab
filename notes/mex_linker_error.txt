@@ -1,0 +1,9 @@
+
+Undefined symbols for architecture x86_64:
+  "_main", referenced from:
+      start in crt1.10.6.o
+     (maybe you meant: bool std::__detail::_Executor<__gnu_cxx::__normal_iterator<char const*, std::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::sub_match<__gnu_cxx::__normal_iterator<char const*, std::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >, std::regex_traits<char>, false>::_M_main<false>(), bool std::__detail::_Executor<__gnu_cxx::__normal_iterator<char const*, std::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::sub_match<__gnu_cxx::__normal_iterator<char const*, std::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >, std::regex_traits<char>, true>::_M_main<false>() )
+ld: symbol(s) not found for architecture x86_64
+collect2: error: ld returned 1 exit status
+
+    mex: link of ' "lib/DubinsAreaCoverage/dubinsAlternating.mex.mexmaci64"' failed.

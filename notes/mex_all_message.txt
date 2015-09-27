@@ -1,0 +1,50 @@
+>> mex -v LDFLAGS='\$LDFLAGS -std=c++11 -g -Wl,-search_paths_first -Wl,-rpath,/Users/dagoodma/asl/dubins_area_coverage/Code/lib/ogdf/_debug -Wl,-rpath,/Users/dagoodma/asl/dubins_area_coverage/Code/lib/LKH -Wl,-headerpad_max_install_names' -I/Users/dagoodma/asl/dubins_area_coverage/Code/include -I/Users/dagoodma/asl/dubins_area_coverage/Code/lib/ogdf/include -I/Users/dagoodma/asl/dubins_area_coverage/Code/lib/LKH/src/include -I/Users/dagoodma/asl/dubins_area_coverage/Code/lib/eigen-eigen-bdd17ee3b1b3 -L/Users/dagoodma/asl/dubins_area_coverage/Code/lib/ogdf/_debug -L/Users/dagoodma/asl/dubins_area_coverage/Code/lib/LKH -L/Users/dagoodma/asl/dubins_area_coverage/Code/src  -lOGDF -lCOIN -lLKH /Users/dagoodma/asl/dubins_area_coverage/Code/src/mex/dubinsAlternating_interface.cpp /Users/dagoodma/asl/dubins_area_coverage/Code/src/TSPLib.cpp /Users/dagoodma/asl/dubins_area_coverage/Code/src/Dubins.cpp
+
+**************************************************************************
+  Warning: Neither -compatibleArrayDims nor -largeArrayDims is selected. 
+           Using -compatibleArrayDims. In the future, MATLAB will require
+           the use of -largeArrayDims and remove the -compatibleArrayDims
+           option. For more information, see:
+           http://www.mathworks.com/help/matlab/matlab_external/upgrading-mex-files-to-use-64-bit-api.html
+**************************************************************************
+
+-> mexopts.sh sourced from directory (DIR = $PREF_DIR)
+   FILE = /Users/dagoodma/.matlab/R2014a/mexopts.sh
+----------------------------------------------------------------
+->    MATLAB                = /Applications/MATLAB_R2014a.app
+->    CC                    = xcrun  -sdk macosx10.7  clang
+->    CC flags:
+         CFLAGS             = -fno-common -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk -mmacosx-version-min=10.7  -fexceptions
+         CDEBUGFLAGS        = -g
+         COPTIMFLAGS        = -O2 -DNDEBUG
+         CLIBS              = -L/Applications/MATLAB_R2014a.app/bin/maci64 -lmx -lmex -lmat -lstdc++
+         arguments          =  -DMX_COMPAT_32
+->    CXX                   = /usr/local/bin/g++
+->    CXX flags:
+         CXXFLAGS           = -std=c++11 -fno-pie
+         CXXDEBUGFLAGS      = -g
+         CXXOPTIMFLAGS      = -O2 -DNDEBUG
+         CXXLIBS            = -L/Applications/MATLAB_R2014a.app/bin/maci64 -lmx -lmex -lmat -lstdc++
+         arguments          =  -DMX_COMPAT_32
+->    FC                    = gfortran
+->    FC flags:
+         FFLAGS             = -fexceptions -m64 -fbackslash
+         FDEBUGFLAGS        = -g
+         FOPTIMFLAGS        = -O
+         FLIBS              = -L/Applications/MATLAB_R2014a.app/bin/maci64 -lmx -lmex -lmat -L -lgfortran -L -lgfortranbegin
+         arguments          =  -DMX_COMPAT_32
+->    LD                    = /usr/local/bin/g++
+->    Link flags:
+         LDFLAGS            = -arch x86_64 -Wl,-syslibroot,/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk -mmacosx-version-min=10.7 -std=c++11 -g -Wl,-search_paths_first -Wl,-rpath,/Users/dagoodma/asl/dubins_area_coverage/Code/lib/ogdf/_debug -Wl,-rpath,/Users/dagoodma/asl/dubins_area_coverage/Code/lib/LKH -Wl,-headerpad_max_install_names
+         LDDEBUGFLAGS       = -g
+         LDOPTIMFLAGS       = -O
+         LDEXTENSION        = .mexmaci64
+         arguments          =  -L/Users/dagoodma/asl/dubins_area_coverage/Code/lib/ogdf/_debug -L/Users/dagoodma/asl/dubins_area_coverage/Code/lib/LKH -L/Users/dagoodma/asl/dubins_area_coverage/Code/src -lOGDF -lCOIN -lLKH
+->    LDCXX                 = 
+->    Link flags:
+         LDCXXFLAGS         = 
+         LDCXXDEBUGFLAGS    = 
+         LDCXXOPTIMFLAGS    = 
+         LDCXXEXTENSION     = 
+         arguments          =  -L/Users/dagoodma/asl/dubins_area_coverage/Code/lib/ogdf/_debug -L/Users/dagoodma/asl/dubins_area_coverage/Code/lib/LKH -L/Users/dagoodma/asl/dubins_area_coverage/Code/src -lOGDF -lCOIN -lLKH
+----------------------------------------------------------------
