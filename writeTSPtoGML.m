@@ -1,9 +1,8 @@
-function [  ] = writeTSPtoGML( filename, V, C )
+function [  ] = writeTSPtoGML( filename, V)
 %writeTSPtoGML Writes the TSP problem to a GML file.
 %   Parameters:
 %       filename    Name of the GML file to save.
-%       V           2xN Matrix of vertex positions [x,y]
-%       C           Starting Configuration (becomes node 1).
+%       V           Nx2 Matrix of vertex positions [x,y]
 %================ Dependencies ================
 addpath('lib');
 
@@ -20,10 +19,9 @@ if (cDim ~= 2)
 end
 
 %=============== Save GML File =================
-n = n + 1; % account for starting position
 A = zeros(n,n); % no edges in GML file
 
-V = [C(1:2); V];
+%V = [C(1:2); V];
 
 graphtogml(filename, A, [], V);
 
