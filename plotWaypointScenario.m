@@ -120,7 +120,9 @@ else
     end
 end
 hold on;
-plot(V(1,1), V(1,2), 'ro', 'MarkerFaceColor', 'r');
+md = normalizationCoeff(V);
+Vn=V./md;
+plot(Vn(1,1), Vn(1,2), 'ro', 'MarkerFaceColor', 'r');
 title(titleStr);
 box on;
 set(gca,'xtick',[],'ytick',[])

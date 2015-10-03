@@ -43,19 +43,13 @@ PATH_COLOR = 'g';
 % Plot waypoint headings first
 plotWaypointHeadings(hAx, V, X, pathOptions);
 
-% Normalization (used below on path)
-md=inf; % the minimal distance between vertexes
-for k1=1:n-1,
-  for k2=k1+1:n,
-    md=min(md,sum((V(k1,:)-V(k2,:)).^2)^0.5);
-  end
-end
-if md<eps, % identical vertexes
-  error('The array V have identical rows!')
-end
+% Normalization
+%V = normalizePoints(V);
+md = normalizationCoeff(V);
 
 % Get waypoint order
 order = getVertexOrder(E);
+
 
 % ====================== Plot Dubins =========================
 position = V(1,:);

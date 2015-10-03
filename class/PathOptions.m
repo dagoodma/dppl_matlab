@@ -4,9 +4,11 @@ classdef PathOptions
     %   Options for all solvers:
     %       
     %       TurnRadius     - Turn radius for Dubins path in meters
-    %                        [positive scalar | {300} ]
+    %                        [positive scalar | {100} ]
     %                        Must be at least three times larger than the
     %                        closest distance between vertices
+    %       SensorWidth    - The width of the sensor footprint in meters
+    %                        [positive scalar | {350} ]
     %       Circuit        - Option to return to starting configuration
     %                        [{'off'} | 'on']
     %       Debug          - Option for printing debug information.
@@ -43,7 +45,8 @@ classdef PathOptions
     %
     
     properties
-        TurnRadius = 300; % [m]
+        TurnRadius = 100; % [m]
+        SensorWidth = 350; % [m]
         Circuit = 'off';
         Debug = 'off';
         %========= Plot Options =========
