@@ -70,6 +70,7 @@ for i=2:n
         v = V(j,:);
         theta = findHeadingFrom(position,v);
         c_j = findPTPCost(position, heading, v, theta, pathOptions.TurnRadius);
+        %fprintf('Considering node %d from node %d. cost=%0.1f\n',j, idx, c_j); 
         
         % Remember this vertex if it's our nearest neighbor
         if (c_i < 0) || (c_j < c_i)
