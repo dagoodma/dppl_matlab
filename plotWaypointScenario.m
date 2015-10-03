@@ -22,6 +22,7 @@ function [hAx] = plotWaypointScenario(V, E, subPlotDim, subPlotIndex, titleStr,.
 %   hAx - axes handle for figure created
 %
 
+
 %============= Input Validation ===============
 if nargin < 1
     error('No input arguments given!');
@@ -61,6 +62,21 @@ if exist('pathOptions','var') && ~isa(pathOptions, 'PathOptions')
 end
 if ~exist('pathOptions','var')
     pathOptions = PathOptions;
+end
+
+
+%% ================ Dependencies ===============
+
+% Find all dependencies
+% Add lib and class folders
+addpath('lib','class');
+
+% Add graph theory toolbox
+if exist('grBase') ~= 2
+    if exist('lib/GrTheory') ~= 7
+        error('Could not find the GrTheory folder.');
+    end
+    addpath('lib/GrTheory');
 end
 
 

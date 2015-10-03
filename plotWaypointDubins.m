@@ -37,6 +37,19 @@ if (n ~= (m + strcmp(pathOptions.Circuit, 'on') - 1))
     error('E dimensions not compatible with V');
 end
 
+%================= Dependencies ====================
+
+% Add Dubins plot tool
+if exist('dubins') ~= 3
+    if exist('lib/DubinsPlot') ~= 7
+        error('Could not find the DubinsPlot folder.');
+    end
+    addpath('lib/DubinsPlot');
+    if exist('dubins') ~= 3
+        error('Could not find compiled dubins mex file.');
+    end
+end
+
 % ======================== Setup ============================
 PATH_COLOR = 'g';
 

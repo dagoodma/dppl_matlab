@@ -1,6 +1,6 @@
-function compileDubinsAreaCoverageMex( input_files, output_file,...
+function compileDubinsSensorCoverageMex( input_files, output_file,...
     lib_names, lib_dirs, include_dirs, verbose, dry_run)
-%UNTITLED Summary of this function goes here
+%COMPILEDUBINSSENSORCOVERAGEMEX Helper for compiling DSC suite
 %   Parameters:
 %       input_files     A Cell array of .cpp filepaths
 %       output_file     Output filepath

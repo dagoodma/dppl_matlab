@@ -1,6 +1,6 @@
-function [E, X, Cost] = solveAlternatingCPP(V,x,pathOptions)
-%solveAlternatingCPP returns the alternating algorithm solution for V
-%   Wrapper for dubinsAlternating solver. Calls the mex function
+function [E, X, Cost] = solveNearestNeighborDTSP(V,x,pathOptions)
+%solveNearestNeighborDTSP returns the nearest neighbor solution for V
+%   Wrapper for dubinsNearestNeighbor solver. Calls the mex function
 %   and solves the vertex set V given the starting heading x.
 %
 %   TODO If pathOptions.Circuit is set to 'on', the return cost will be included
@@ -22,18 +22,17 @@ function [E, X, Cost] = solveAlternatingCPP(V,x,pathOptions)
 addpath('lib','class');
 
 % Add nearest neighbor MEX
-if exist('dubinsAlternating') ~= 3
-    if exist('lib/DubinsAreaCoverage') ~= 7
-        error('Could not find the DubinsAreaCoverage folder.');
+if exist('dubinsNearestNeighbor') ~= 3
+    if exist('lib/DubinsSensorCoverage') ~= 7
+        error('Could not find the DubinsSensorCoverage folder.');
     end
-    addpath('lib/DubinsAreaCoverage');
-    if exist('dubinsAlternating') ~= 3
-        error('Could not find compiled dubinsAlternating mex file.');
+    addpath('lib/DubinsSensorCoverage');
+    if exist('dubinsNearestNeighbor') ~= 3
+        error('Could not find compiled dubinsNearestNeighbor mex file.');
     end
 end
 
 % Call the MEX file
-[E, X, Cost] = dubinsAlternating(V, x, pathOptions.TurnRadius);
+[E, X, Cost] = dubinsNearestNeighbor(V, x, pathOptions.TurnRadius);
 
 end
-

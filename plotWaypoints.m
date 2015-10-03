@@ -23,6 +23,20 @@ if dimc ~= 2
     error('Expected V to have 2 columns');
 end
 
+%% ================ Dependencies ===============
+
+% Find all dependencies
+% Add lib and class folders
+addpath('lib','class');
+
+% Add graph theory toolbox
+if exist('grBase') ~= 2
+    if exist('lib/GrTheory') ~= 7
+        error('Could not find the GrTheory folder.');
+    end
+    addpath('lib/GrTheory');
+end
+
 
 %=============== Plot waypoints ===============
 [n,~] = size(V);
