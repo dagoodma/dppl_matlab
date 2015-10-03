@@ -18,6 +18,7 @@ DUBINS_INCLUDE=[DUBINS_FOLDER, '/include'];
 OGDF_INCLUDE=[DUBINS_FOLDER, '/lib/ogdf/include'];
 LKH_INCLUDE=[DUBINS_FOLDER, '/lib/LKH/src/include'];
 EIGEN_INCLUDE=[DUBINS_FOLDER, '/lib/eigen-eigen-bdd17ee3b1b3'];
+CXXOPTS_INCLUDE=[DUBINS_FOLDER, '/lib/cxxopts/src'];
 
 SRC_FOLDER=[DUBINS_FOLDER, '/src'];
 MEX_FOLDER=[SRC_FOLDER, '/mex'];
@@ -36,7 +37,8 @@ mex_output_filepath=[OUT_FOLDER, '/', filename];
 % Compile cpp_files into  
 compileDubinsAreaCoverageMex(cpp_files, mex_output_filepath,...
     {'LKH', 'OGDF'}, {LKH_LIBS, OGDF_LIBS, SRC_FOLDER}, {LKH_INCLUDE,...
-    OGDF_INCLUDE, DUBINS_INCLUDE, EIGEN_INCLUDE}, VERBOSE, DRY_RUN);
+    OGDF_INCLUDE, DUBINS_INCLUDE, EIGEN_INCLUDE, CXXOPTS_INCLUDE},...
+    VERBOSE, DRY_RUN);
     
 %     
 % mex('-v', ['LDFLAGS=\$LDFLAGS -std=c++11 -g -Wl,-search_paths_first ',...
@@ -62,6 +64,6 @@ mex_output_filepath=[OUT_FOLDER, '/', filename];
 
 compileDubinsAreaCoverageMex(cpp_files, mex_output_filepath,...
     {'OGDF'}, {OGDF_LIBS, SRC_FOLDER}, {OGDF_INCLUDE, DUBINS_INCLUDE,...
-    EIGEN_INCLUDE}, VERBOSE, DRY_RUN);
+    EIGEN_INCLUDE, CXXOPTS_INCLUDE}, VERBOSE, DRY_RUN);
 
 end % if COMPILE_NEARESTNEIGHBOR
