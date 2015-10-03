@@ -213,9 +213,53 @@ else
     testsPassed = testsPassed + 1;
 end
 
-fprintf('----------------------------\n');
+%% Boundaries when angle distance is small
+%subplot(2,2,4);
+
+% Position
+%findDubinsLength([450 0], 3.927, [350, -100], 3.927, 10.2)
+startPosition = [450 0];
+startHeading = 3.92699 + 0.00001; % rad
+endPosition = [350, -100];
+endHeading = 3.92699; % rad
+q0 = [startPosition heading2Theta(startHeading)];
+q1 = [endPosition heading2Theta(endHeading)];
+
+% Plotting
+path = dubins(q0, q1, opts.TurnRadius, opts.DubinsStepSize);
+%plot([startPosition(1) endPosition(1)], [startPosition(2) endPosition(2)],...
+%    'ko', 'MarkerFaceColor', 'k')
+L =  findDubinsLength(startPosition, startHeading, endPosition, endHeading,...
+    opts.TurnRadius);
+hold on;
+%set(0,'currentFigure',fh)
+%plot(path(1,1:end), path(2,1:end), 'Color', 'g');
+%title('Case IV: L-S-L');
+%yl = ylim();
+%text(0,yl(1)+5,sprintf('L = %.2f',L));
+
+% Count length of path from DubinsPlot tool
+Lexpected = 0;
+for i=2:length(path)
+    l_i = sqrt((path(1,i) - path(1,i-1))^2 + (path(2,i) - path(2,i-1))^2);
+    Lexpected  = Lexpected + l_i;
+end % for
+
+% Results
+result = L;
+resultExpected = Lexpected;
+theta_diff = endHeading - startHeading;
+fprintf('Boundary (Line) Test: L = %.2f, CWdiff=%0.6f',result, theta_diff);
+if (abs(result - resultExpected) > EPSILON_ERROR)
+    fprintf('\t-- FAILED: expected %.2f\n',resultExpected);
+else
+    fprintf('\t-- PASS\n');
+    testsPassed = testsPassed + 1;
+end
+
 
 %% Results
+fprintf('----------------------------\n');
 if (testsPassed ~= totalTests)
     fprintf('\nFAILED %i of %i tests\n\n',totalTests - testsPassed, totalTests);
 else

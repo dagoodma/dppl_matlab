@@ -12,6 +12,7 @@ function [ length ] = findDubinsLength( p_s, x_s, p_e, x_e, r, createPlot)
 %
 DUBINS_DEBUG = 0;
 DEBUG_VERBOSE = 0; % plots dubins trajectories
+DEBUG_VVERBOSE = 0; % extra verbosity
 %============= Input Validation ===============
 if nargin < 1
     error('No input arguments given!');
@@ -43,7 +44,7 @@ theta_e = heading2Theta(x_e);
 % TODO be sure we aren't using anonymous functions anywhere. They are slow.
 %rotm = @(theta) [cos(theta) sin(theta) 0; -sin(theta) cos(theta) 0; 0 0 1]';
 
-% TODO replace everywhere with wrapTo2Pi()
+% TODO replace everywhere with wrapAngle()
 %wrap = @(theta) mod(theta,2*pi);
 
 
@@ -76,8 +77,15 @@ end
 
 % Case I, R-S-R
 theta = findHeadingFrom(c_rs,c_re);
-L1 = norm(c_rs - c_re) + r*wrapTo2Pi(2*pi + wrapTo2Pi(theta - pi/2) - wrapTo2Pi(x_s - pi/2))...
-    + r*wrapTo2Pi(2*pi + wrapTo2Pi(x_e - pi/2) - wrapTo2Pi(theta - pi/2));
+if (DEBUG_VVERBOSE)
+fprintf('norm(c_rs - c_re)=%.6f \nr*wrap1=%0.6f \nr*wrap2=%0.6f\n',...
+   norm(c_rs - c_re), r*wrapAngle(2*pi + wrapAngle(theta - pi/2) - wrapAngle(x_s - pi/2)),...
+   r*wrapAngle(2*pi + wrapAngle(x_e - pi/2) - wrapAngle(theta - pi/2)));
+fprintf('r*wrap2: wrapAngle(x_e - pi/2)=%0.6f, wrapAngle(theta - pi/2)=%0.6f\n',...
+    wrapAngle(x_e - pi/2), wrapAngle(theta - pi/2));
+end
+L1 = norm(c_rs - c_re) + r*wrapAngle(2*pi + wrapAngle(theta - pi/2) - wrapAngle(x_s - pi/2))...
+    + r*wrapAngle(2*pi + wrapAngle(x_e - pi/2) - wrapAngle(theta - pi/2));
 if (DUBINS_DEBUG & DEBUG_VERBOSE)
     theta
     L1
@@ -87,8 +95,8 @@ end
 len = norm(c_le - c_rs);
 theta = findHeadingFrom(c_rs,c_le);
 theta2 = theta - pi/2 + asin((2*r)/len);
-L2 = sqrt(len^2 - 4*r^2)+r*wrapTo2Pi(2*pi + wrapTo2Pi(theta2) - wrapTo2Pi(x_s - pi/2))...
-    + r*wrapTo2Pi(2*pi + wrapTo2Pi(theta2 + pi) - wrapTo2Pi(x_e + pi/2));
+L2 = sqrt(len^2 - 4*r^2)+r*wrapAngle(2*pi + wrapAngle(theta2) - wrapAngle(x_s - pi/2))...
+    + r*wrapAngle(2*pi + wrapAngle(theta2 + pi) - wrapAngle(x_e + pi/2));
 if (DUBINS_DEBUG & DEBUG_VERBOSE)
     L2
 end
@@ -102,16 +110,16 @@ if (2*r/len) > 1 || (2*r/len) < -1
     error('Error in case III');
 end
 
-L3 = sqrt(len^2 - 4*r^2) + r*wrapTo2Pi(2*pi + wrapTo2Pi(x_s + pi/2) - wrapTo2Pi(theta + theta2))...
-    + r*wrapTo2Pi(2*pi + wrapTo2Pi(x_e - pi/2) - wrapTo2Pi(theta + theta2 - pi));
+L3 = sqrt(len^2 - 4*r^2) + r*wrapAngle(2*pi + wrapAngle(x_s + pi/2) - wrapAngle(theta + theta2))...
+    + r*wrapAngle(2*pi + wrapAngle(x_e - pi/2) - wrapAngle(theta + theta2 - pi));
 if (DUBINS_DEBUG & DEBUG_VERBOSE)
     L3
 end
 
 % Case IV, L-S-L
 theta = findHeadingFrom(c_ls,c_le);
-L4 = norm(c_ls - c_le) + r*wrapTo2Pi(2*pi + wrapTo2Pi(x_s + pi/2) - wrapTo2Pi(theta + pi/2))...
-    + r*wrapTo2Pi(2*pi + wrapTo2Pi(theta + pi/2) - wrapTo2Pi(x_e + pi/2));
+L4 = norm(c_ls - c_le) + r*wrapAngle(2*pi + wrapAngle(x_s + pi/2) - wrapAngle(theta + pi/2))...
+    + r*wrapAngle(2*pi + wrapAngle(theta + pi/2) - wrapAngle(x_e + pi/2));
 if (DUBINS_DEBUG & DEBUG_VERBOSE)
     L4
 end
@@ -177,4 +185,6 @@ end
 function M = rotm(theta)
 M = [cos(theta) sin(theta) 0; -sin(theta) cos(theta) 0; 0 0 1]';
 end
+
+
 

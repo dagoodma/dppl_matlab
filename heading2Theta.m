@@ -12,13 +12,13 @@ if isempty(psi) || psi < 0 || psi >= 2*pi
     error('psi must be between 0 and 2*pi')
 end
 % =============================================================
-theta = mod(-(psi - pi/2),2*pi);
+theta = angularMod(-(psi - pi/2),2*pi);
 
 end %% function heading2Theta()
 
-%Note mod is actually:
+%Note angle safe mod if:
 %
-%function [m] = myMod(x,y)
+%function [m] = mymod(x,y)
 %   n = floor(x./y);
 %   m = x - n.*y;
 %end
