@@ -33,7 +33,7 @@ if (n ~= length(X))
     error('Length of V and X do not match');
 end
 
-if (n ~= (m + strcmp(pathOptions.Circuit, 'on') - 1))
+if (m ~= (n + strcmp(pathOptions.Circuit, 'on') - 1))
     error('E dimensions not compatible with V');
 end
 
@@ -78,7 +78,7 @@ for i=2:(m+1)
     theta_0 = heading2Theta(heading);
     q0 = [position(1:2) theta_0];
     vi = order(i);
-    if i < (m+1)
+    if i < (m+1) || (i <= (m+1) && strcmp(pathOptions.Circuit,'off'))
         theta_1 = heading2Theta(X(vi));
         q1 = [V(vi,:) theta_1];
     else

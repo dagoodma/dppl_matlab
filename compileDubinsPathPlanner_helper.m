@@ -1,6 +1,6 @@
-function compileDubinsSensorCoverageMex( input_files, output_file,...
+function compileDubinsPathPlanner_helper( input_files, output_file,...
     lib_names, lib_dirs, include_dirs, verbose, dry_run)
-%COMPILEDUBINSSENSORCOVERAGEMEX Helper for compiling DSC suite
+%COMPILEDUBINSPATHPLANNER Helper for compiling DPP
 %   Parameters:
 %       input_files     A Cell array of .cpp filepaths
 %       output_file     Output filepath

@@ -1,4 +1,4 @@
-function [E, X, Cost] = solveAlternatingDTSP(V,x,pathOptions)
+function [E, X, Cost] = solveDTSP(V,x,pathOptions,algorithm)
 %solveAlternatingDTSP returns the alternating algorithm solution for V
 %   Wrapper for dubinsAlternating solver. Calls the mex function
 %   and solves the vertex set V given the starting heading x.
@@ -9,7 +9,8 @@ function [E, X, Cost] = solveAlternatingDTSP(V,x,pathOptions)
 %   Parameters:
 %       V           Set of vertices n-by-2
 %       x           Start heading in radians
-%       pathOptions Options for solver
+%       pathOptions Options for solver (uses TurnRadius and Circuit)
+%       [algorithm] Algorithm name ('alternating', 'randomized', 'nearest')
 %   Returns:
 %       E       m-by-2 set of edges representing the tour
 %       X       n-by-1 vector of headings at each vertex
@@ -22,18 +23,29 @@ function [E, X, Cost] = solveAlternatingDTSP(V,x,pathOptions)
 addpath('lib','class');
 
 % Add nearest neighbor MEX
-if exist('dubinsAlternating') ~= 3
-    if exist('lib/DubinsSensorCoverage') ~= 7
-        error('Could not find the DubinsSensorCoverage folder.');
+if exist('dppSolveDTSP') ~= 3
+    if exist('lib/DubinsPathPlanner') ~= 7
+        error('Could not find the DubinsPathPlanner folder.');
     end
-    addpath('lib/DubinsSensorCoverage');
-    if exist('dubinsAlternating') ~= 3
-        error('Could not find compiled dubinsAlternating mex file.');
+    addpath('lib/DubinsPathPlanner');
+    if exist('dppSolveDTSP') ~= 3
+        error('Could not find compiled dppSolveDTSP mex file.');
     end
 end
 
 % Call the MEX file
-[E, X, Cost] = dubinsAlternating(V, x, pathOptions.TurnRadius);
+r = pathOptions.TurnRadius;
+returnToInitial = 1;
+extraArgs = {};
+
+if (strcmp(pathOptions.Circuit,'off'))
+    returnToInitial = 0;
+    extraArgs = {returnToInitial};
+end
+if nargin > 3
+    extraArgs = {returnToInitial, algorithm};
+end
+[E, X, Cost] = dppSolveDTSP(V, x, r, extraArgs{:});
 
 end
 

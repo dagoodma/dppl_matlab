@@ -46,11 +46,11 @@ uicontrol('Style', 'text',...
 % ============== Nearest Neighbor (greedy PTP) ======================
 fprintf('Running Nearest Neighbor (C++) solver...\n');
 tic;
-[E, X, Cost] = solveNearestNeighborDTSP(V,startHeading,options);
+[E, X, Cost] = solveDTSP(V,startHeading,options,'nearest')
 
 elapsedTime = toc;
 c = Cost;
-vertexOrder = getVertexOrder(E);
+vertexOrder = getVertexOrder(E)
 
 if strcmp(options.Debug,'on')
     fprintf(['Found Nearest Neighbor C++ solution with a total cost of %.2f in %.2f seconds.\n\n'],...
@@ -60,11 +60,12 @@ titleStr = sprintf('Nearest Neighbor C++ (cost = %.2f)',c);
 hAx = plotWaypointScenario(V, E, subplotDim, 2, titleStr, options);
 plotWaypointDubins(hAx, V, E, X, options); 
 
+
 % ============== Alternating Algorithm (DTSP) ======================
 
 fprintf('Running Alternating Algorithm (C++) solver...\n');
 tic;
-[E, X, Cost] = solveAlternatingDTSP(V,startHeading,options);
+[E, X, Cost] = solveDTSP(V,startHeading,options,'alternating');
 
 elapsedTime = toc;
 c = Cost;
@@ -82,11 +83,12 @@ plotWaypointDubins(hAx, V, E, X, options);
 
 fprintf('Running Randomized Algorithm (C++) solver...\n');
 tic;
-[E, X, Cost] = solveRandomizedDTSP(V,startHeading,options);
+[E, X, Cost] = solveDTSP(V,startHeading,options,'randomized');
 
 elapsedTime = toc;
 c = Cost;
 vertexOrder = getVertexOrder(E);
+findDubinsTourCost(V,X,E,options);
 
 if strcmp(options.Debug,'on')
     fprintf(['Found Randomized Algorithm C++ solution with a total cost of %.2f in %.2f seconds.\n\n'],...

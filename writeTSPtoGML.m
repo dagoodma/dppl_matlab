@@ -9,7 +9,7 @@ addpath('lib');
 %============= Input Validation ===============
 if nargin < 1
     error('No input arguments given!');
-elseif nargin > 3
+elseif nargin > 2
     error('Too many arguments given!');
 end
 

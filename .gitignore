@@ -5,3 +5,4 @@
 trash/
 .DS_Store
 *.mex*
+*.log

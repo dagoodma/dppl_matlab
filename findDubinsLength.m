@@ -11,7 +11,7 @@ function [ length ] = findDubinsLength( p_s, x_s, p_e, x_e, r, createPlot)
 %       length  Length of the path
 %
 DUBINS_DEBUG = 0;
-DEBUG_VERBOSE = 0; % plots dubins trajectories
+DEBUG_VERBOSE = 0; 
 DEBUG_VVERBOSE = 0; % extra verbosity
 %============= Input Validation ===============
 if nargin < 1
@@ -104,11 +104,18 @@ end
 % Case III, L-S-R
 len = norm(c_re - c_ls);
 theta = findHeadingFrom(c_ls,c_re);
-theta2 = acos((2*r)/len);
-
-if (2*r/len) > 1 || (2*r/len) < -1
-    error('Error in case III');
+ratio_oa = (2*r)/len;
+if ratio_oa > 1, ratio_oa = 1; end
+if ratio_oa < -1, ratio_oa = -1; end
+theta2 = acos(ratio_oa);
+if (DUBINS_DEBUG & DEBUG_VERBOSE)
+    fprintf('Ratio OA: %0.5f, theta=%0.5f, theta2=%0.5f, len=%0.5f\n',...
+        ratio_oa, theta, theta2, len);
 end
+
+%if (2*r/len) > 1 || (2*r/len) < -1
+%    error('Error in case III');
+%end
 
 L3 = sqrt(len^2 - 4*r^2) + r*wrapAngle(2*pi + wrapAngle(x_s + pi/2) - wrapAngle(theta + theta2))...
     + r*wrapAngle(2*pi + wrapAngle(x_e - pi/2) - wrapAngle(theta + theta2 - pi));

@@ -55,14 +55,20 @@ if strcmp(opts.Debug, 'on')
     opts
 end
 
+filenames = {['../data/triangle_polygon.dlm']};
+size = 3;
+
 %% ============== Build Scenarios ============
-w = opts.SensorWidth;
-Vo = @(n) ones(n,2); % offset vector
-Polygons = {[w*[0,0; 0,5; 5,5; 5,0] + Vo(4)*2*w],... % square
-         [w*[0,0; 0,6; 3,6; 3,2; 3,0; 7,0;] + Vo(6)*2*w]}; % non-concave
-N=length(Polygons);
 startPosition = [0.0, 0.0];
 startHeading = 0.0;
+w = opts.SensorWidth;
+%Vo = @(n) ones(n,2); % offset vector
+%Polygons = {[w*[0,0; 0,5; 5,5; 5,0] + Vo(4)*2*w],... % square
+%         [w*[0,0; 0,6; 3,6; 3,2; 3,0; 7,0;] + Vo(6)*2*w]}; % non-concave
+%Polygons
+%for i=1:length(filenames)
+%Polygons = {read
+N=length(filenames);
 
 if strcmp(opts.Debug, 'on')
     fprintf('# %s is running %d scenario(s)...\n-------------------------------------\n',...
@@ -71,14 +77,15 @@ end
 
 for i=1:N
 
-    % Find WPs in polygon
-    P = Polygons{i};
+    % Find WPs in polygon, loaded from file
+    P = readMatrixFile(filenames{i}) * size * opts.TurnRadius;
     points=polygrid(P(:,1),P(:,2),1/(w^2));
     
     % Plot WPs
     figure('units','normalized','outerposition',[0 0 1 1]);
     subplot(221);
-    [n, ~] = size(points);
+    n = length(points);
+    
     V = [startPosition; points];
     titleStr = sprintf('%d WP Scenario', n);
     hAx = plotWaypointScenario(V, [], [2 2], 1, titleStr, opts);
