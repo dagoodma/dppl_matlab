@@ -1,6 +1,12 @@
 function drawHeadingArrow(hAx, origin, psi, arrowSize, color)
 % DRAWHEADINGARROW draws an annotation arrow at the heading psi
 
+%% ================ Dependencies ===============
+
+% Find all dependencies
+% Add lib and class folders
+addpath('lib','class');
+
 % =================== Check Arguments ========================
 if nargin < 1
     error('No input arguments given!');
@@ -50,9 +56,35 @@ else
     py = oy + arrowSize*sin(psi);
 end
 
+%[of, pf] = dsxy2figxy(gca, [ox oy], [px py])
+%oxf = of(1), oyf = of(2)
+%pxf = pf(1), pyf = pf(2)
+%[pxf, pyf] = dsxy2figxy(hAx, px, py);
+
+%[oxf, oyf] = ds2nfu(hAx, ox, oy)
+%[pxf, pyf] = ds2nfu(hAx, px, py)
+
+% annotation('textarrow',ox,oy,'String','y = x ')
+
+% ox, px, oy, py
+% hold on;
+% plot(ox, oy, '*g');
+% hold off;
+% [of pf] = axescoord2figurecoord([ox px], [oy py], hAx);
+% oxf = of(1); 
+% oyf = of(2);
+% pxf = pf(1);
+% pyf = pf(2);
+
+% annotation_pinned('arrow', [oxf pxf], [oyf pyf], 'Color', color,...
+%     'HeadLength', headLength, 'HeadWidth', headWidth, 'axes', hAx);
+
 [oxf, oyf] = ds2nfu(hAx, ox, oy);
 [pxf, pyf] = ds2nfu(hAx, px, py);
 annotation('arrow', [oxf pxf], [oyf pyf], 'Color', color,...
     'HeadLength', headLength, 'HeadWidth', headWidth);
+
+% annotation_pinned('arrow', [oxf pxf], [oyf pyf], 'Color', color,...
+%     'HeadLength', headLength, 'HeadWidth', headWidth, 'axes', hAx);
 
 end % function drawHeadingArrow()

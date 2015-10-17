@@ -79,50 +79,9 @@ if exist('grBase') ~= 2
     addpath('lib/GrTheory');
 end
 
-
-% 
-% %========= Rebuild V and E to include starting configuration ===========
-% [n,~] = size(V);
-% [m,~] = size(E);
-% Vhat = [C(1:2);V];
-% Ehat = E;
-% 
-% if (m > 0)
-%     i_first = E(1,1) + 1;
-%     i_last = E(end,2) + 1;
-%     i_secondlast = E(end,1) + 1;
-% 
-%     % Increment old edge indices
-%     I = ones(m,3);
-%     I(:,3) = 0;
-%     Ehat = Ehat + I;
-% 
-%     % Add approach edge
-%     v = Vhat(i_first,:);
-%     theta = findHeadingFrom(C(1:2),v); % Note: should be line theta
-%     c = findPTPCost(C(1:2), C(3), v, theta, pathOptions.TurnRadius);
-%     if exist('c_approach', 'var')
-%         c = c_approach;
-%     end
-%     Ehat = [1 i_first c; Ehat];
-% 
-%     % Add return edge
-%     if pathOptions.Circuit
-%         v = Vhat(i_last,:);
-%         v_hat = Vhat(i_secondlast,:);
-%         theta_start = findHeadingFrom(v_hat,v);
-%         theta_end = findHeadingFrom(v,C(1:2));
-%         c = findPTPCost(v, theta_start, C(1:2), theta_end,...
-%             pathOptions.TurnRadius);
-%         if exist('c_return', 'var')
-%             c = c_return;
-%         end
-%         Ehat = [Ehat; i_last 1 c];
-%     end      
-% end
-
 %=============== Plot waypoints ===============
 hAx = subplot(subPlotDim(1),subPlotDim(2),subPlotIndex);
+
 %dx = 0.0; dy = -0.1; % displacement so the text does not overlay the data points
 %text(C(1)+dx, C(2)+dy, 'Start/End');
 if (m < 1)
@@ -139,9 +98,14 @@ hold on;
 md = normalizationCoeff(V);
 Vn=V./md;
 plot(Vn(1,1), Vn(1,2), 'ro', 'MarkerFaceColor', 'r');
+
+
+% Set title, border, and ticks
 title(titleStr);
 box on;
 set(gca,'xtick',[],'ytick',[])
+
+% Change axes width/height
 xl = xlim;
 yl = ylim;
 xld = abs(xl(1) - xl(2));

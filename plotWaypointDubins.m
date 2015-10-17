@@ -53,9 +53,6 @@ end
 % ======================== Setup ============================
 PATH_COLOR = 'g';
 
-% Plot waypoint headings first
-plotWaypointHeadings(hAx, V, X, pathOptions);
-
 % Normalization
 %V = normalizePoints(V);
 md = normalizationCoeff(V);
@@ -77,13 +74,14 @@ for i=2:(m+1)
     % Generate Dubins path
     theta_0 = heading2Theta(heading);
     q0 = [position(1:2) theta_0];
-    vi = order(i);
+    vi = order(i); % get index of vertex in tour
     if i < (m+1) || (i <= (m+1) && strcmp(pathOptions.Circuit,'off'))
         theta_1 = heading2Theta(X(vi));
         q1 = [V(vi,:) theta_1];
     else
         % Return to start
-        q1 = [V(1,:) X(1)];
+        theta_1 = heading2Theta(X(1));
+        q1 = [V(1,:) theta_1];
     end
     path = dubins(q0, q1, pathOptions.TurnRadius, pathOptions.DubinsStepSize);
     
@@ -113,6 +111,16 @@ end
 if strcmp(pathOptions.Debug,'on')
     fprintf('Simulated Dubins'' path with cost %0.2f\n', C_total);
 end
+
+% Plot waypoint headings
+
+% set(hAx,'DataAspectRatioMode', 'auto');
+% set(hAx,'PlotBoxAspectRatioMode', 'auto');
+
+% set(hAx,'DataAspectRatio', [1 1 1]);
+% set(hAx,'PlotBoxAspectRatio', [1 1 1]);
+
+plotWaypointHeadings(hAx, V./md, X, pathOptions);
 
 
 end % function plotWaypointDubins

@@ -95,7 +95,7 @@ for i=1:N
     %points = [startPosition; points];
     %points = Vo(length(points))*w/2 + points; % centroids
     %scatter(points(:,1), points(:,2));
-    runDTSPAlgorithms(V, startHeading,opts);
+    runDtspAlgorithms(V, startHeading,opts);
     
 end
 

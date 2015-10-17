@@ -44,7 +44,7 @@ end
 HEADING_COLOR = 'm';
 START_HEADING_COLOR = 'r';
 
-% Normalization
+% % Normalization
 md=inf; % the minimal distance between vertexes
 for k1=1:n-1,
   for k2=k1+1:n,
@@ -57,12 +57,21 @@ else
   V(:,1:2)=V(:,1:2)/md; % normalization
 end
 
+% md = normalizationCoeff(V);
+% Vn = V./md;
+
+%V
+%[V(:,1), V(:,2)] = ds2nfu(hAx, V(:,1), V(:,2))
+
 % ====================== Plot Headings =========================
 % Plot starting heading
 %drawHeadingArrow(hAx, C(1:2), C(3), pathOptions.HeadingArrowSize, START_HEADING_COLOR)
 
 % Plot WP headings
-for i=1:n
+%V
+%X
+drawHeadingArrow(hAx, V(1,:), X(1), pathOptions.HeadingArrowSize, START_HEADING_COLOR)
+for i=2:n
    drawHeadingArrow(hAx, V(i,:), X(i), pathOptions.HeadingArrowSize, HEADING_COLOR)
 end
 

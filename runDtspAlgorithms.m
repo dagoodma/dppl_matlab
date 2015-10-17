@@ -1,8 +1,8 @@
-function [ ] = runDTSPAlgorithms( V, x, options)
+function [ ] = runDtspAlgorithms( V, x, options)
 %RUNDTSPALGORITHMS Solves the DTSP with 3 different solvers.
 % Plots solutions from various DTSP PTAS algorithms: nearest neighbor (greedy
-% point-to-point), alternating algorithm, randomized algorithm. The solvers
-% are written in C++, and called as mex files.
+% point-to-point), alternating algorithm, randomized algorithm using the 
+% Dubins Path Planner (DPP) solver.
 %
 %   Parameters:
 %       V       An n-by-2 matrix of vertices to visit.
@@ -46,7 +46,7 @@ uicontrol('Style', 'text',...
 % ============== Nearest Neighbor (greedy PTP) ======================
 fprintf('Running Nearest Neighbor (C++) solver...\n');
 tic;
-[E, X, Cost] = solveDTSP(V,startHeading,options,'nearest')
+[E, X, Cost] = solveDtsp(V,startHeading,options,'nearest')
 
 elapsedTime = toc;
 c = Cost;
@@ -65,7 +65,7 @@ plotWaypointDubins(hAx, V, E, X, options);
 
 fprintf('Running Alternating Algorithm (C++) solver...\n');
 tic;
-[E, X, Cost] = solveDTSP(V,startHeading,options,'alternating');
+[E, X, Cost] = solveDtsp(V,startHeading,options,'alternating');
 
 elapsedTime = toc;
 c = Cost;
@@ -83,7 +83,7 @@ plotWaypointDubins(hAx, V, E, X, options);
 
 fprintf('Running Randomized Algorithm (C++) solver...\n');
 tic;
-[E, X, Cost] = solveDTSP(V,startHeading,options,'randomized');
+[E, X, Cost] = solveDtsp(V,startHeading,options,'randomized');
 
 elapsedTime = toc;
 c = Cost;
