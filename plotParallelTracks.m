@@ -1,44 +1,31 @@
-function [ ] = plotParallelTracks( polygon, width )
+function [ ] = plotParallelTracks( polygon, tracks, coverageWidth, trackAngle )
 %PLOTPARALLELTRACKS Plots parallel field tracks for covering the polygon
-%   Tracks are plotted that effectively cover the polygon. Lines are plotted
-%   in the direction of the polygon's minimum altitude coverage angle.
+%   Tracks are plotted that effectively cover the polygon by the coverage
+%   width. Track lines are plottedin the direction of trackAngle.
 
-% Find all segments that have the correct angle
-
-sweepSegments = [];
-for i=1:(polygon.N)
-	s = polygon.Segments(i);
-	ang = angularMod(s.getAngle(),pi);
-	fprintf('Considering line %d with angle=%f\n',i, rad2deg(ang));
-	if (ang == polygon.CoverageAngle )
-		if (length(sweepSegments) >= 2)
-			error('Polygon must not be convex!');
-		end
-		sweepSegments = [sweepSegments; s];
-	end
-end
-
-if (length(sweepSegments) < 1)
-	error('Polygon coverage angle did not match a segment');
-end
-
-%sweepSegments
-%size(sweepSegments)
-
-s = sweepSegments(1);
-hold on;
-plot([s.StartVertex(1),s.EndVertex(1)], [s.StartVertex(2),s.EndVertex(2)],'LineWidth',2);
-%if (length(sweepSegments) > 1)
-%	s = sweepSegments(2);
-%	plot([s.StartVertex(1),s.EndVertex(1)], [s.StartVertex(2),s.EndVertex(2)],'LineWidth',2);
+%% Get normalization coefficient
+%normalizePlot = 0;
+%md = get(gcf,'UserData'); % save normalization coefficient
+%if (isempty(md))
+    md = 1;
 %end
 
+%% Initial plot of sweep segment
+s = polygon.findSegment(trackAngle);
+hold on;
+line = [s.StartVertex(1) ,s.EndVertex(1);...
+        s.StartVertex(2),s.EndVertex(2)]./md;
+plot([line(1,1) line(2,1)], [line(2,1) line(2,2)],'LineWidth',2);
+
 %% Test new sweep line method
-Tracks = findParallelTracks(polygon, width)
-for i=1:length(Tracks)
-	s = Tracks(i);
-	plot([s.StartVertex(1) s.EndVertex(1)], [s.StartVertex(2) s.EndVertex(2)], '--g');
+%Tracks = generateParallelTracks(polygon, width)
+for i=1:length(tracks)
+	s = tracks(i);
+    line = [s.StartVertex(1) ,s.EndVertex(1);...
+            s.StartVertex(2),s.EndVertex(2)]./md;
+    plot([line(1,1) line(2,1)], [line(2,1) line(2,2)],'--g');
 end
+plot(0,0,'or');
 hold off;
 
 end % function

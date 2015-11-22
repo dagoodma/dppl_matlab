@@ -25,17 +25,15 @@ classdef Segment < handle
         	l = Line(obj);
         	onLine = l.containsPoint(p);
         	if onLine
-        		disp('Checking if p is on segment with')
-        		maxX = max(obj.StartVertex(1), obj.EndVertex(1))
-        		maxY = max(obj.StartVertex(2), obj.EndVertex(2))
-        		minX = min(obj.StartVertex(1), obj.EndVertex(1))
-        		minY = min(obj.StartVertex(2), obj.EndVertex(2))
+        		maxX = max(obj.StartVertex(1), obj.EndVertex(1));
+        		maxY = max(obj.StartVertex(2), obj.EndVertex(2));
+        		minX = min(obj.StartVertex(1), obj.EndVertex(1));
+        		minY = min(obj.StartVertex(2), obj.EndVertex(2));
         		result = (p(1) >= minX && p(1) <= maxX...
         			&& p(2) >= minY && p(2) <= maxY);
         	else
         		result = false;
-        	end
-        	result
+            end
         end
 
    end
