@@ -1,22 +1,22 @@
-function [theta] = heading2Theta(psi)
-% HEADING2THETA Converts a heading angle psi to a circular angle theta
+function [psi] = angle2Heading(theta)
+% ANGLE2HEADING Converts a circular angle theta to a heading psi
 
 % =================== Check Arguments ========================
 if nargin < 1
     error('No input arguments given!');
-elseif nargin > 8
+elseif nargin > 1
     error('Too many arguments given!');
 end
 
-if isempty(psi) || psi < 0 || psi >= 2*pi
-    error('psi must be between 0 and 2*pi')
+if isempty(theta) || theta < 0 || theta >= 2*pi
+    error('theta must be between 0 and 2*pi')
 end
 % =============================================================
-theta = angularMod(-(psi - pi/2),2*pi);
+psi = heading2Theta(theta); % function is involutory
 
 end %% function heading2Theta()
 
-%Note angle safe mod if:
+%Here's an angle safe mod that's used under the hood by MATLAB:
 %
 %function [m] = mymod(x,y)
 %   n = floor(x./y);

@@ -97,7 +97,7 @@ end
 hold on;
 md = normalizationCoeff(V);
 Vn=V./md;
-plot(Vn(1,1), Vn(1,2), 'ro', 'MarkerFaceColor', 'r');
+plot(Vn(1,1), Vn(1,2), 'mo', 'MarkerFaceColor', 'b');
 
 
 % Set title, border, and ticks

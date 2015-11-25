@@ -72,15 +72,15 @@ end
 
 for i=2:(m+1)
     % Generate Dubins path
-    theta_0 = heading2Theta(heading);
+    theta_0 = heading2angle(heading);
     q0 = [position(1:2) theta_0];
     vi = order(i); % get index of vertex in tour
     if i < (m+1) || (i <= (m+1) && strcmp(pathOptions.Circuit,'off'))
-        theta_1 = heading2Theta(X(vi));
+        theta_1 = heading2angle(X(vi));
         q1 = [V(vi,:) theta_1];
     else
         % Return to start
-        theta_1 = heading2Theta(X(1));
+        theta_1 = heading2angle(X(1));
         q1 = [V(1,:) theta_1];
     end
     path = dubins(q0, q1, pathOptions.TurnRadius, pathOptions.DubinsStepSize);

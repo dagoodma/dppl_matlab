@@ -40,7 +40,7 @@ opts.Debug = 'on';
 fprintf('\n');
 fh = figure();
 testsPassed = 0;
-totalTests = 4;
+totalTests = 5;
 
 %% Case I, R-S-R
 subplot(2,2,1);
@@ -218,9 +218,9 @@ end
 
 % Position
 %findDubinsLength([450 0], 3.927, [350, -100], 3.927, 10.2)
-startPosition = [450 0];
+startPosition = [45.0*r 0];
 startHeading = 3.92699 + 0.00001; % rad
-endPosition = [350, -100];
+endPosition = [35.0*r, -1*r];
 endHeading = 3.92699; % rad
 q0 = [startPosition heading2Theta(startHeading)];
 q1 = [endPosition heading2Theta(endHeading)];
@@ -257,6 +257,39 @@ else
     testsPassed = testsPassed + 1;
 end
 
+%% When distance is small and angle difference is large
+figure();
+subplot(2,1,1);
+
+% Added node 8: (-10,8.58579) to the graph.
+% Added node 9: (-10,5.75736) to the graph.
+% Position
+%findDubinsLength([450 0], 3.927, [350, -100], 3.927, 10.2)
+startPosition = [-10*r,8.58579*r];
+startHeading = 2.35619; % rad
+endPosition = [-10*r, 5.75736*r];
+endHeading = 5.49779; % rad
+q0 = [startPosition heading2Theta(startHeading)];
+q1 = [endPosition heading2Theta(endHeading)];
+
+% Plotting
+path = dubins(q0, q1, opts.TurnRadius, opts.DubinsStepSize);
+plot([startPosition(1) endPosition(1)], [startPosition(2) endPosition(2)],...
+    'ko', 'MarkerFaceColor', 'k')
+%L =  findDubinsLength(startPosition, startHeading, endPosition, endHeading,...
+%    opts.TurnRadius, 1);
+%set(0,'currentFigure',fh)
+hold on;
+plot(path(1,1:end), path(2,1:end), 'Color', 'g');
+title('Extreme');
+yl = ylim();
+hold off;
+% Count length of path from DubinsPlot tool
+Lexpected = 0;
+for i=2:length(path)
+    l_i = sqrt((path(1,i) - path(1,i-1))^2 + (path(2,i) - path(2,i-1))^2);
+    Lexpected  = Lexpected + l_i;
+end % for
 
 %% Results
 fprintf('----------------------------\n');

@@ -42,7 +42,7 @@ end
 
 % ======================== Setup ============================
 HEADING_COLOR = 'm';
-START_HEADING_COLOR = 'r';
+START_HEADING_COLOR = 'b';
 
 % % Normalization
 md=inf; % the minimal distance between vertexes
