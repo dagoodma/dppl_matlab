@@ -24,6 +24,8 @@ classdef PathOptions
     %                        [positive scalar | {0.15}]
     %       DubinsStepSize   - Step size for plotting Dubins paths in seconds
     %                        [positive scalar | {0.01}] 
+    %       SubPlotDim     - Dimensions used by subplot command
+    %                        [2-by-1 vector | {[2 2]}]
     %  
     %   Options for all line-to-line (LTL) solvers:
     %
@@ -54,6 +56,7 @@ classdef PathOptions
         EdgeArrowSize = 1; 
         HeadingArrowSize = 0.15;
         DubinsStepSize = 0.01; % [sec]
+        SubPlotDim = [2 2];
         %========= LTL Options ==========
         LineStepTheta = pi/4; % [rad] default: 45 degrees
         LineTolTheta = 0.0175; % [rad] default: 1 degree

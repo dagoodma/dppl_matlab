@@ -2,10 +2,12 @@ function [ Segments ] = generateParallelTracks( polygon, width, angle )
 %GENERATEPARALLELTRACKS Returns a set of parallel tracks that cover the polygon
 %   Uses a simplified sweep line method to find track segments.
     Segments = [];
+    disp('Found sweep segment:');
     s = polygon.findSegment(angle)
-    theta = findSweepAngle(polygon, s);
+    sweepAngle = findSweepAngle(polygon, s);
     sweepLine = Line(s);
-    sweepLine.translate(width/2, theta);
+    sweepLine.translate(width/2, sweepAngle);
+    sweepLine
     %disp('Translated sweep line:');
     %sweepLine
     atEnd = false;
@@ -17,7 +19,7 @@ function [ Segments ] = generateParallelTracks( polygon, width, angle )
         else
             Segments = [Segments; sTrack(1)];
             % Translate line by width
-            sweepLine.translate(width, theta);
+            sweepLine.translate(width, sweepAngle);
             %sweepLine
         end
     end % while

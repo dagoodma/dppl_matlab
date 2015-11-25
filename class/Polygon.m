@@ -79,7 +79,7 @@ classdef Polygon < handle
                 error('Polygon coverage angle did not match a segment');
             end
 
-            sweepSegment = sweepSegments(1);
+            sweepSegment = sweepSegments(1)
         end % function
     end % methods
 end

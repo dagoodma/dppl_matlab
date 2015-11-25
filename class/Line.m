@@ -4,9 +4,6 @@ classdef Line < handle
     
     properties(SetAccess = public)
         IsVertical = false;
-    % Slope-intercept form
-        Slope 
-        Intercept  
     % Normal form
         A
         B
@@ -26,24 +23,21 @@ classdef Line < handle
                 end
                 varargin = {s.StartVertex; s.EndVertex};
             end
-
-            if (isscalar(varargin{1}))
-                % Given slope/intercept scalars
-                self.Slope = varargin{1};
-                self.Intercept = varargin{2};
-            else
+            if (~isscalar(varargin{1}))
                 % Given 2 points
                 p1 = varargin{1};
                 p2 = varargin{2};
-                self.Slope = (p2(2) - p1(2))/(p2(1) - p1(1)); % divide by zero if line is parallel to y-axis
-                self.Intercept = p1(2) - self.Slope*p1(1);
+                self.A = -(p2(2) - p1(2))/(p2(1) - p1(1)); % divide by zero if line is parallel to y-axis
+                self.B = 1;
+                self.C = p1(2) + self.A * p1(1);
+            else 
+                error('here');
             end
 
-            self.updateNormalForm();
-            if (isinf(self.Slope))
-                %error('Vertical lines not yet supported');
+            %self.updateNormalForm();
+            if (isinf(self.A))
                 self.IsVertical = true;
-                self.A = varargin{1}(1);
+                self.A = p1(1);
             end
         end
 
@@ -53,7 +47,7 @@ classdef Line < handle
             obj;
             if (~obj.IsVertical)
                 result = (obj.C - (obj.A*p(1) + obj.B*p(2))) < epsError;
-                err = (obj.A*p(1) + obj.B*p(2)) - obj.C
+                %err = (obj.A*p(1) + obj.B*p(2)) - obj.C
             else
                 result = (p(1) - obj.A) < epsError;
             end
@@ -66,23 +60,10 @@ classdef Line < handle
             %obj
 
             theta = angularMod(theta, 2*pi);
-            if (theta <= pi/2)
-                dx = d*cos(theta);
-                dy = d*sin(theta);
-            elseif (theta <= pi)
-                dx = -d*sin(theta - pi/2);
-                dy = d*cos(theta - pi/2);
-            elseif (theta <= 3*pi/2)
-                dx = -d*cos(theta - pi);
-                dy = -d*sin(theta - pi);
-            else
-                dx = d*sin(theta - 3*pi/2);
-                dy = -d*cos(theta - 3*pi/2);
-            end
-
+            [dx, dy] = pol2cart(theta, d);
+            
             if (~obj.IsVertical)
-                obj.Intercept = obj.Intercept + dy - obj.Slope*dx;
-                obj.updateNormalForm();
+                obj.C = obj.C + dy + obj.A*dx;
             else
                 % FIXME compute component for non-perpendicular angles
                 %db = d;
@@ -96,18 +77,18 @@ classdef Line < handle
         end
 
         % Sets the normal form properties using slope-intercept form properties
-        function updateNormalForm(obj)
-            obj.A = -obj.Slope;
-            obj.B = 1;
-            obj.C = obj.Intercept;
-        end
+        %function updateNormalForm(obj)
+        %    obj.A = -obj.Slope;
+        %    obj.B = 1;
+        %    obj.C = obj.Intercept;
+        %end
 
         % Find the point of interception with another line. Returns an empty array if the lines
         % are identical, or if they are parallel.
         function p = findIntercept(obj, line2)
             p = [];
 
-            if (obj.Slope ~= line2.Slope)
+            if (obj.slope() ~= line2.slope())
                 if (~obj.IsVertical && ~line2.IsVertical) 
                     p = [(obj.C*line2.B - obj.B*line2.C)/(obj.A*line2.B - obj.B*line2.A),...
                         (obj.A*line2.C - obj.C*line2.A)/(obj.A*line2.B - obj.B*line2.A)];
@@ -118,6 +99,14 @@ classdef Line < handle
                 end
             end
         end 
+        
+        function m = slope(obj)
+            if (~obj.IsVertical)
+                m = -obj.A
+            else
+                m = inf;
+            end
+        end % function
 
     end % methods
 

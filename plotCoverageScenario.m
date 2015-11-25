@@ -1,5 +1,5 @@
-function [hAx] = plotCoverageScenario(P, C, subPlotDim, subPlotIndex, titleStr,...
-    pathOptions)
+function [hAx] = plotCoverageScenario(P, C, subPlotDim, subPlotIndex,...
+    titleStr, pathOptions)
 %PLOTCOVERAGESCENARIO Plots a sensor coverage scenario
 %   This function will plot the edges of the polygon P.
 %
@@ -72,9 +72,12 @@ V = [C(1:2); P];
 
 
 % Normalization
-md = normalizationCoeff(V);
-Pn = P./md;
-Cn = C(1:2)./md;
+%md = normalizationCoeff(V);
+
+%set(gcf,'UserData',md); % save normalization coefficient
+
+Pn = P;%./md;
+Cn = C(1:2);%./md;
 
 % Plotting
 plot([Pn(:,1); Pn(1,1)], [Pn(:,2); Pn(1,2)], '--b');
@@ -114,7 +117,7 @@ yld = abs(yl(1) - yl(2));
 xlim([xl(1) - xld*0.1, xl(2) + xld*0.1]);
 ylim([yl(1) - yld*0.1, yl(2) + yld*0.1]);
 
-drawHeadingArrow(hAx, Cn(1:2), C(3), pathOptions.HeadingArrowSize, START_HEADING_COLOR)
+drawHeadingArrow(hAx, Cn(1:2), C(3), pathOptions.HeadingArrowSize, START_HEADING_COLOR, true)
 
 hold off;
 
