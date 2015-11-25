@@ -1,8 +1,8 @@
-function [ ] = runCppAsDtspAlgorithms( P, C, options)
-%RUNDTSPALGORITHMS Solves the CPP problem as DTSP with 3 different solvers.
-% Plots solutions from various DTSP PTAS algorithms: nearest neighbor (greedy
-% point-to-point), alternating algorithm, randomized algorithm using the 
-% Dubins Path Planner (DPP) solver.
+function [ ] = doCppAsDtspAlgorithms( P, C, options)
+%DODTSPALGORITHMS Solves and plots the CPP problem as a DTSP.
+% Plots solutions from various heuristic DTSP algorithms: nearest neighbor
+% (greedy point-to-point), alternating algorithm, randomized algorithm
+% using the Dubins Path Planning Library (DPPL).
 %
 %   Parameters:
 %       P       An n-by-2 matrix of polygon vertices.

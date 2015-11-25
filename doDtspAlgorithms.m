@@ -1,8 +1,8 @@
-function [ ] = runDtspAlgorithms( V, x, options)
-%RUNDTSPALGORITHMS Solves the DTSP with 3 different solvers.
+function [ ] = doDtspAlgorithms( V, x, options)
+%DODTSPALGORITHMS Solves and plots the DTSP with 3 different algirithms.
 % Plots solutions from various DTSP PTAS algorithms: nearest neighbor (greedy
-% point-to-point), alternating algorithm, randomized algorithm using the 
-% Dubins Path Planner (DPP) solver.
+% point-to-point), alternating algorithm, randomized algorithm using the
+% Dubins Path Planning Library (DPPL).
 %
 %   Parameters:
 %       V       An n-by-2 matrix of vertices to visit.

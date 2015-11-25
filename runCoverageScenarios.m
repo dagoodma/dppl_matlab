@@ -1,7 +1,8 @@
-% Investigates solutions to various scenarios with PTAS algorithms.
+% Investigates solutions to various coverage path plannng (CPP) scenarios.
+% Test polygon data is read from loadCoveragePolygons.m
 %
 % David Goodman
-% 2015.10.02
+% 2015.11.18
 
 close all;
 clear all;
@@ -21,9 +22,9 @@ if exist('grBase') ~= 2
 end
 
 %% =============== Settings ===============
-filenames = {['../data/triangle_polygon.dlm']};
-size = 3; % multiplier for polygon coordinates 
-initialConfig = [0 0 4.7]; % initial position and headings [rad]
+%filenames = {['../data/triangle_polygon.dlm']};
+%size = 3; % multiplier for polygon coordinates 
+initialConfig = [0 0 0.0]; % initial position and headings [rad]
 
 % % Vehicle settings
 % Va = 10; % [m/s] fixed airspeed
@@ -35,8 +36,8 @@ initialConfig = [0 0 4.7]; % initial position and headings [rad]
 % fov2=0.8457; % [rad] x-direction
 % % Reduced turn radius and width for visibility of costs in large scenarios
 % Just hardcode for now
-r = 1; % Va^2/(tan(phi_max)*g)
-w = 3.5*r; % abs(2*h*tan(fov2/2))/(sin(pi + fov1/2));
+r = 23; % Va^2/(tan(phi_max)*g)
+w = 160; % abs(2*h*tan(fov2/2))/(sin(pi + fov1/2));
 
 % Path options
 opts = PathOptions;
@@ -65,17 +66,18 @@ end
 startPosition = initialConfig(1:2);
 startHeading = initialConfig(3);
 
-N=length(filenames);
+loadCoveragePolygons;
 
-if strcmp(opts.Debug, 'on')
-    fprintf('# %s is running %d scenario(s)...\n-------------------------------------\n',...
-        mfilename, N);
-end
+% Another simple convex polygon
+P =  Polygon([26.6357, 135.882;...
+    -166.484, 146.488;...
+    -195.627, -99.1082;...
+    -71.6223, -331.982;...
+     139.126, -258.175]);
+
+
 
 for i=1:N
-
-    % Find WPs in polygon, loaded from file
-    P = readMatrixFile(filenames{i}) * size * opts.TurnRadius;
     
     % Plot polygon
     figure('units','normalized','outerposition',[0 0 1 1]);
@@ -87,12 +89,12 @@ for i=1:N
     %Pn=P./md;
     %Cn=C./md;
     hAx = plotCoverageScenario(P, C, [2 2], 1, titleStr, opts);
+    axis square;
     %plotWaypointHeadings(hAx, C(1:2), C(3), pathOptions);
     %hAx = plotWaypointScenario(V, [], [2 2], 1, titleStr, opts);
     %plotWaypointGrid(hAx, points, opts);
     pause(0.5) % need to pause or else annotations will shift
     
-    runCppAsDtspAlgorithms(P, C,opts);
+    %runCppAsDtspAlgorithms(P, C,opts);
+    runCppAlgorithms(P, C,opts);
     
-end
-
