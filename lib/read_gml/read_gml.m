@@ -2,11 +2,17 @@ function graph = read_gml(filename)
 % READ_GML returns hierarchical datastructure of information in % .gml file.
 
     content = fileread(filename);
+
+    %remove comments
+    commentExp = '^\s*comment.*$';
+    content = regexprep(content, commentExp, '', 'lineanchors', 'dotexceptnewline');
+
     content = strrep(content, sprintf('\n'), ''); 
     
     %for consistent input
     content = strrep(content, '[', ' [ ');
     content = strrep(content, ']', ' ] ');
+
     
     %remove multiple whitespaces in the content:
     loop = 1; 
