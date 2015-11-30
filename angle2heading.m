@@ -1,4 +1,4 @@
-function [psi] = angle2Heading(theta)
+function [psi] = angle2heading(theta)
 % ANGLE2HEADING Converts a circular angle theta to a heading psi
 
 % =================== Check Arguments ========================
@@ -12,9 +12,9 @@ if isempty(theta) || theta < 0 || theta >= 2*pi
     error('theta must be between 0 and 2*pi')
 end
 % =============================================================
-psi = heading2Theta(theta); % function is involutory
+psi = heading2angle(theta); % function is involutory
 
-end %% function heading2Theta()
+end %% function heading2angle()
 
 %Here's an angle safe mod that's used under the hood by MATLAB:
 %
