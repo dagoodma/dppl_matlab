@@ -37,8 +37,8 @@ if (pdim < 3)
     p_e = [p_e 0]; 
 end
 
-theta_s = heading2Theta(x_s);
-theta_e = heading2Theta(x_e);
+theta_s = heading2angle(x_s);
+theta_e = heading2angle(x_e);
 
 % Inline function for right-handed rotation of theta about z-axis
 % TODO be sure we aren't using anonymous functions anywhere. They are slow.
@@ -160,30 +160,34 @@ hold on;
 %scatter([c_s(1) c_e(1)],[c_s(2) c_e(2)],'r+');
 %plot([c_s(1) c_e(1)],[c_s(2) c_e(2)],'k--');
 % Plot circles
-formatArgs={':k','LineWidth',0.005};
+formatArgs={'-k','LineWidth',0.005};
 plotCircle(c_rs(1), c_rs(2), r, formatArgs);
 plotCircle(c_re(1), c_re(2), r, formatArgs);
 plotCircle(c_ls(1), c_ls(2), r, formatArgs);
 plotCircle(c_le(1), c_le(2), r, formatArgs);
-text(c_rs(1), c_rs(2), 'c_{rs}', 'FontSize', 12);
-text(c_re(1), c_re(2), 'c_{re}', 'FontSize', 12);
-text(c_ls(1), c_ls(2), 'c_{ls}', 'FontSize', 12);
-text(c_le(1), c_le(2), 'c_{le}', 'FontSize', 12);
+text(c_rs(1), c_rs(2), 'c_{rs}', 'FontSize', 17);
+text(c_re(1), c_re(2), 'c_{re}', 'FontSize', 17);
+text(c_ls(1), c_ls(2), 'c_{ls}', 'FontSize', 17);
+text(c_le(1), c_le(2), 'c_{le}', 'FontSize', 17);
 
 % Change graph dimensions
-xl = xlim;
-yl = ylim;
-maxDimLen = max(abs(xl(1) - xl(2)),abs(yl(1) - yl(2)));
-xld = abs(xl(1) - xl(2));
-yld = abs(yl(1) - yl(2));
-xlim([xl(1) - xld*0.1, xl(2) + maxDimLen*0.1]);
-ylim([yl(1) - yld*0.1, yl(2) + maxDimLen*0.1]);
+% xl = xlim;
+% yl = ylim;
+% maxDimLen = max(abs(xl(1) - xl(2)),abs(yl(1) - yl(2)));
+% xld = abs(xl(1) - xl(2));
+% yld = abs(yl(1) - yl(2));
+% xlim([xl(1) - xld*0.1, xl(2) + maxDimLen*0.1]);
+% ylim([yl(1) - yld*0.1, yl(2) + maxDimLen*0.1]);
+% axis square;
+axis equal tight;
+expandAxes(1.25,1.25);
+%axis equal;
 
 % Plot headings
 hAx = gca;
 scatter([p_s(1) p_e(1)], [p_s(2) p_e(2)], 'r');
-drawHeadingArrow(hAx, p_s(1:2), x_s, r/3, 'b');
-drawHeadingArrow(hAx, p_e(1:2), x_e, r/3, 'b');
+drawHeadingArrow(hAx, p_s(1:2), x_s, 0.8, 'b',1);
+drawHeadingArrow(hAx, p_e(1:2), x_e, 0.8, 'b',1);
 
 hold off;
 end

@@ -14,7 +14,7 @@ end
 % =============================================================
 theta = angularMod(-(psi - pi/2),2*pi);
 
-end %% function heading2Theta()
+end %% function heading2angle()
 
 %Here's an angle safe mod that's used under the hood by MATLAB:
 %

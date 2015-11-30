@@ -70,8 +70,8 @@ for i=1:m
     targ_id = E(i,2);
     V0 = V(src_id,:);
     V1 = V(targ_id,:);
-    q0 = [V0 heading2Theta(X(src_id))];
-    q1 = [V1 heading2Theta(X(targ_id))];
+    q0 = [V0 heading2angle(X(src_id))];
+    q1 = [V1 heading2angle(X(targ_id))];
     
     path_i = dubins(q0, q1, opts.TurnRadius, opts.DubinsStepSize);
     l_i = 0;
@@ -136,8 +136,8 @@ for i=1:m
     targ_id = E(i,2);
     V0 = V(src_id,:);
     V1 = V(targ_id,:);
-    q0 = [V0 heading2Theta(X(src_id))];
-    q1 = [V1 heading2Theta(X(targ_id))];
+    q0 = [V0 heading2angle(X(src_id))];
+    q1 = [V1 heading2angle(X(targ_id))];
     
     path_i = dubins(q0, q1, opts.TurnRadius, opts.DubinsStepSize);
     l_i = 0;

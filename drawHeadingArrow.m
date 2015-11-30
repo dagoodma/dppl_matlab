@@ -116,8 +116,8 @@ end
 end % function drawHeadingArrow()
 
 function [px, py] = getArrowEndpoint(origin, psi, s)
-	ox = origin(1)
-	oy = origin(2)
+	ox = origin(1);
+	oy = origin(2);
 
 	px = ox;
 	py = oy;

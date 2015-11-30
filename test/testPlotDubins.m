@@ -30,11 +30,11 @@ opts.HeadingArrowSize = 1.5;
 % Position
 startPosition = [0 0];
 startHeading = 0; % radians
-q0 = [startPosition heading2Theta(startHeading)];
+q0 = [startPosition heading2angle(startHeading)];
 
 endPosition = [50 0];
 endHeading = deg2rad(180); % radians
-q1 = [endPosition heading2Theta(endHeading)];
+q1 = [endPosition heading2angle(endHeading)];
 
 % Plotting
 figure();

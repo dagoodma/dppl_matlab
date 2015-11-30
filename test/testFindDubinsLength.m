@@ -5,6 +5,7 @@ close all;
 addpath('..')
 addpath('../lib');
 addpath('../class');
+%addpath('../lib/spaceplots');
 % Add Dubins plot tool
 if exist('dubins') ~= 3
     if exist('../lib/DubinsPlot') ~= 7
@@ -51,8 +52,8 @@ startHeading = 0; % radians
 endPosition = [5 0];
 endHeading = deg2rad(180); % radians
 
-q0 = [startPosition heading2Theta(startHeading)];
-q1 = [endPosition heading2Theta(endHeading)];
+q0 = [startPosition heading2angle(startHeading)];
+q1 = [endPosition heading2angle(endHeading)];
 
 % Plotting
 path = dubins(q0, q1, opts.TurnRadius, opts.DubinsStepSize);
@@ -94,8 +95,8 @@ startHeading = deg2rad(37); % radians
 endPosition = [5.27*r -1.3*r];
 endHeading = deg2rad(340); % radians
 
-q0 = [startPosition heading2Theta(startHeading)];
-q1 = [endPosition heading2Theta(endHeading)];
+q0 = [startPosition heading2angle(startHeading)];
+q1 = [endPosition heading2angle(endHeading)];
 
 % Plotting
 path = dubins(q0, q1, opts.TurnRadius, opts.DubinsStepSize);
@@ -136,8 +137,8 @@ startPosition = [0 0];
 startHeading = deg2rad(245); % radians
 endPosition = [5.27*r -1.3*r];
 endHeading = deg2rad(165); % radians
-q0 = [startPosition heading2Theta(startHeading)];
-q1 = [endPosition heading2Theta(endHeading)];
+q0 = [startPosition heading2angle(startHeading)];
+q1 = [endPosition heading2angle(endHeading)];
 
 % Plotting
 path = dubins(q0, q1, opts.TurnRadius, opts.DubinsStepSize);
@@ -179,8 +180,8 @@ startPosition = [0 0];
 startHeading = deg2rad(170); % radians
 endPosition = [5.27*r -1.3*r];
 endHeading = deg2rad(315); % radians
-q0 = [startPosition heading2Theta(startHeading)];
-q1 = [endPosition heading2Theta(endHeading)];
+q0 = [startPosition heading2angle(startHeading)];
+q1 = [endPosition heading2angle(endHeading)];
 
 % Plotting
 path = dubins(q0, q1, opts.TurnRadius, opts.DubinsStepSize);
@@ -222,8 +223,8 @@ startPosition = [45.0*r 0];
 startHeading = 3.92699 + 0.00001; % rad
 endPosition = [35.0*r, -1*r];
 endHeading = 3.92699; % rad
-q0 = [startPosition heading2Theta(startHeading)];
-q1 = [endPosition heading2Theta(endHeading)];
+q0 = [startPosition heading2angle(startHeading)];
+q1 = [endPosition heading2angle(endHeading)];
 
 % Plotting
 path = dubins(q0, q1, opts.TurnRadius, opts.DubinsStepSize);
@@ -269,8 +270,8 @@ startPosition = [-10*r,8.58579*r];
 startHeading = 2.35619; % rad
 endPosition = [-10*r, 5.75736*r];
 endHeading = 5.49779; % rad
-q0 = [startPosition heading2Theta(startHeading)];
-q1 = [endPosition heading2Theta(endHeading)];
+q0 = [startPosition heading2angle(startHeading)];
+q1 = [endPosition heading2angle(endHeading)];
 
 % Plotting
 path = dubins(q0, q1, opts.TurnRadius, opts.DubinsStepSize);
