@@ -40,7 +40,7 @@ end
 if nargin > 3
     extraArgs = {returnToInitial, algorithm};
 end
-[E, X, Cost] = dppSolveDTSP(V, x, r, extraArgs{:});
+[E, X, Cost] = dppSolveDtsp(V, x, r, extraArgs{:});
 
 end
 

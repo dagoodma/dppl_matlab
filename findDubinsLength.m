@@ -165,10 +165,15 @@ plotCircle(c_rs(1), c_rs(2), r, formatArgs);
 plotCircle(c_re(1), c_re(2), r, formatArgs);
 plotCircle(c_ls(1), c_ls(2), r, formatArgs);
 plotCircle(c_le(1), c_le(2), r, formatArgs);
-text(c_rs(1), c_rs(2), 'c_{rs}', 'FontSize', 17);
-text(c_re(1), c_re(2), 'c_{re}', 'FontSize', 17);
-text(c_ls(1), c_ls(2), 'c_{ls}', 'FontSize', 17);
-text(c_le(1), c_le(2), 'c_{le}', 'FontSize', 17);
+text(c_rs(1)+0.2, c_rs(2), 'c_{rs}', 'FontSize', 17);
+text(c_re(1)+0.2, c_re(2), 'c_{re}', 'FontSize', 17);
+text(c_ls(1)+0.2, c_ls(2), 'c_{ls}', 'FontSize', 17);
+text(c_le(1)+0.2, c_le(2), 'c_{le}', 'FontSize', 17);
+% dot in the center
+plot(c_rs(1),c_rs(2),'k.','MarkerSize',13)
+plot(c_re(1),c_re(2),'k.','MarkerSize',13) 
+plot(c_ls(1),c_ls(2),'k.','MarkerSize',13)
+plot(c_le(1),c_le(2),'k.','MarkerSize',13)
 
 % Change graph dimensions
 % xl = xlim;

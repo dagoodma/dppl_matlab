@@ -20,7 +20,13 @@ classdef Polygon < handle
         % width and angle of the polygon.
         function self = Polygon(V, w, a)
             self.Vertices = V;
-            self.N = length(V);
+            [self.N, dimC] = size(V);
+            if (dimC ~= 2)
+                error('Expected V to have 2 columns.');
+            end
+            if (self.N < 3)
+                error('Expected at least 3 vertices.');
+            end
             if nargin > 1
                 self.Width = w;
             end
@@ -53,6 +59,7 @@ classdef Polygon < handle
                 end
             end
 
+            % Add segment back to start (Does not add another vertex!)
             s = Segment(V(self.N,:), V(1,:));
             self.Segments = [self.Segments; s];
         end % function

@@ -39,8 +39,8 @@ uicontrol('Style', 'text',...
    'BackgroundColor', 'white',...
    'Position', [0.345 0.965 0.29 0.037]);
 
-% ============== Nearest Neighbor (greedy PTP) ======================
-fprintf('Running Nearest Neighbor (C++) solver on CPP problem...\n');
+% ============== Boustrophedon  ======================
+fprintf('Running Boustrophedon (C++) solver on CPP problem...\n');
 tic;
 [V, E, X, Cost] = solveCpp(P,C,options,'boustrophedon')
 
@@ -53,48 +53,11 @@ if strcmp(options.Debug,'on')
         c, elapsedTime);
 end
 titleStr = sprintf('Boustrophedon C++ (cost = %.2f)',c);
-hAx = plotWaypointScenario(V, E, subplotDim, 2, titleStr, options);
-plotWaypointDubins(hAx, V, E, X, options); 
+subplot(subplotDim(1),subplotDim(2),2);
+plotWaypointScenario(V, E, options);
+plotWaypointDubins(V, E, X, options); 
+title(titleStr);
 pause(0.5)
 
-% 
-% % ============== Alternating Algorithm (DTSP) ======================
-% 
-% fprintf('Running Alternating Algorithm (C++) solver on CPP problem...\n');
-% tic;
-% [V, E, X, Cost] = solveCppAsDtsp(P,C,options,'alternating');
-% 
-% elapsedTime = toc;
-% c = Cost;
-% vertexOrder = getVertexOrder(E);
-% 
-% if strcmp(options.Debug,'on')
-%     fprintf(['Found Alternating Algorithm C++ solution with a total cost of %.2f in %.2f seconds.\n\n'],...
-%         c, elapsedTime);
-% end
-% titleStr = sprintf('Alternating C++ (cost = %.2f)',c);
-% hAx = plotWaypointScenario(V, E, subplotDim, 3, titleStr, options);
-% plotWaypointDubins(hAx, V, E, X, options); 
-% 
-% % ============== Randomized Algorithm (DTSP) ======================
-% 
-% fprintf('Running Randomized Algorithm (C++) solver on CPP problem...\n');
-% tic;
-% [V, E, X, Cost] = solveCppAsDtsp(P,C,options,'randomized');
-% 
-% elapsedTime = toc;
-% c = Cost;
-% vertexOrder = getVertexOrder(E);
-% findDubinsTourCost(V,X,E,options);
-% 
-% if strcmp(options.Debug,'on')
-%     fprintf(['Found Randomized Algorithm C++ solution with a total cost of %.2f in %.2f seconds.\n\n'],...
-%         c, elapsedTime);
-% end
-% titleStr = sprintf('Randomized C++ (cost = %.2f)',c);
-% hAx = plotWaypointScenario(V, E, subplotDim, 4, titleStr, options);
-% plotWaypointDubins(hAx, V, E, X, options); 
-
-% fix annotations
-print;
+%print;
 

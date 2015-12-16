@@ -8,6 +8,21 @@ close all;
 clear all;
 clc;
 
+%% =============== Dependencies ===============
+% Find all dependencies
+% Add lib and class folders
+addpath('lib')
+addpath('class');
+
+% Add graph theory toolbox
+if exist('grBase') ~= 2
+    if exist('lib/GrTheory') ~= 7
+        error('Could not find the GrTheory folder.');
+    end
+    addpath('lib/GrTheory');
+end
+
+
 %% =============== Settings ===============
 initialConfig = [0 0 0.0]; % initial position and headings [rad]
 polygonFilename = {['../data/test/cpp/examplePolygon1.gml']};
@@ -23,7 +38,7 @@ polygonFilename = {['../data/test/cpp/examplePolygon1.gml']};
 % % Reduced turn radius and width for visibility of costs in large scenarios
 
 % Just hardcode for now
-r = 35; % Va^2/(tan(phi_max)*g)
+r = 20; % Va^2/(tan(phi_max)*g)
 w = 160; % abs(2*h*tan(fov2/2))/(sin(pi + fov1/2));
 
 % Path options
@@ -49,21 +64,6 @@ opts.SubPlotDim = [1 2];
 if strcmp(opts.Debug, 'on')
     opts
 end
-
-%% =============== Dependencies ===============
-% Find all dependencies
-% Add lib and class folders
-addpath('lib')
-addpath('class');
-
-% Add graph theory toolbox
-if exist('grBase') ~= 2
-    if exist('lib/GrTheory') ~= 7
-        error('Could not find the GrTheory folder.');
-    end
-    addpath('lib/GrTheory');
-end
-
 
 %% ============== Build Scenarios ============
 startPosition = initialConfig(1:2);

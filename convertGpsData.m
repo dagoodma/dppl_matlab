@@ -30,8 +30,8 @@ if mOrigin ~= 1 || nOrigin ~= 3
 end
 
 %% Open the convert the data
-[xNorth, yEast] = geodetic2ned(geoData(:,1),geoData(:,2),geoData(:,3),origin(1), origin(2),...
+[xNorth, yEast, zDown] = geodetic2ned(geoData(:,1),geoData(:,2),geoData(:,3),origin(1), origin(2),...
 		origin(3), wgs84Ellipsoid);
-dataNed = [xNorth, yEast];
+dataNed = [xNorth, yEast, zDown];
 
 end % function

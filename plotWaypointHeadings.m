@@ -1,4 +1,4 @@
-function [fig] = plotWaypointHeadings(hAx, V, X, pathOptions)
+function [fig] = plotWaypointHeadings(hAx, V, X, opts)
 % PLOTWAYPOINTHEADINGS plots waypoint headings on top of current figure
 %   Called after plotWaypointScenario to plot headings X on top of
 %   waypoints.
@@ -7,7 +7,7 @@ function [fig] = plotWaypointHeadings(hAx, V, X, pathOptions)
 %   hAx - axes handle to plot onto
 %   V(n,2) - an n-by-2 matrix of vertice coordinates
 %   X(n,1) - an n-by-1 vector of headings for each vertex
-%   pathOptions - optional path options object. use default if not given
+%   opts - optional path options object. use default if not given
 %
 
 % =================== Check Arguments ========================
@@ -35,26 +35,29 @@ if (n ~= nX)
     error(sprintf('X (%d) dimensions should match V (%d)',nX,n));
 end
 
-if ~exist('pathOptions','var')
-    pathOptions = PathOptions;
+if ~exist('opts','var')
+    opts = PathOptions;
 end
 
+useQuiver = strcmp(opts.NormalizePlots, 'off');
 
 % ======================== Setup ============================
-HEADING_COLOR = 'm';
-START_HEADING_COLOR = 'b';
+HEADING_COLOR = opts.HeadingArrowColor;
+START_HEADING_COLOR = opts.HeadingStartArrowColor;
 
 % % Normalization
-md=inf; % the minimal distance between vertexes
-for k1=1:n-1,
-  for k2=k1+1:n,
-    md=min(md,sum((V(k1,:)-V(k2,:)).^2)^0.5);
+if ~useQuiver
+  md=inf; % the minimal distance between vertexes
+  for k1=1:n-1,
+    for k2=k1+1:n,
+      md=min(md,sum((V(k1,:)-V(k2,:)).^2)^0.5);
+    end
   end
-end
-if md<eps, % identical vertexes
-  error('The array V have identical rows!')
-else
-  V(:,1:2)=V(:,1:2)/md; % normalization
+  if md<eps, % identical vertexes
+    error('The array V have identical rows!')
+  else
+    V(:,1:2)=V(:,1:2)/md; % normalization
+  end
 end
 
 % md = normalizationCoeff(V);
@@ -65,19 +68,24 @@ end
 
 % ====================== Plot Headings =========================
 % Plot starting heading
-%drawHeadingArrow(hAx, C(1:2), C(3), pathOptions.HeadingArrowSize, START_HEADING_COLOR)
+%drawHeadingArrow(hAx, C(1:2), C(3), opts.HeadingArrowSize, START_HEADING_COLOR)
 
 % Plot WP headings
 %V
 %X
-drawHeadingArrow(hAx, V(1,:), X(1), pathOptions.HeadingArrowSize, START_HEADING_COLOR)
+hArrow = drawHeadingArrow(hAx, V(1,:), X(1), opts.HeadingArrowSize, START_HEADING_COLOR, useQuiver);
+disableLegendEntry(hArrow);
 for i=2:n
-   drawHeadingArrow(hAx, V(i,:), X(i), pathOptions.HeadingArrowSize, HEADING_COLOR)
+   hArrow = drawHeadingArrow(hAx, V(i,:), X(i), opts.HeadingArrowSize, HEADING_COLOR, useQuiver);
+   % Remove legend entries for duplicates
+   if (i > 2)
+      disableLegendEntry(hArrow);
+   end
 end
 
 % % Plot return heading (if set)
 % if m > n
-%     drawHeadingArrow(hAx, C(1:2), X(m), pathOptions.HeadingArrowSize, HEADING_COLOR)
+%     drawHeadingArrow(hAx, C(1:2), X(m), opts.HeadingArrowSize, HEADING_COLOR)
 % end
 
 

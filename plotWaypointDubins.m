@@ -1,17 +1,14 @@
-function [fig] = plotWaypointDubins(hAx, V, E, X, pathOptions)
+function [hAx, pDubins] = plotWaypointDubins(V, E, X, opts)
 % PLOTWAYPOINTDubins plots dubins paths on top of figure
 
 % =================== Check Arguments ========================
 
 if nargin < 1
     error('No input arguments given!');
-elseif nargin > 6
+elseif nargin > 4
     error('Too many arguments given!');
 end
 
-if isempty(hAx)
-    error('hAx not given!');
-end
 if isempty(V)
     error('V is empty!');
 end
@@ -33,9 +30,10 @@ if (n ~= length(X))
     error('Length of V and X do not match');
 end
 
-if (m ~= (n + strcmp(pathOptions.Circuit, 'on') - 1))
+if (m ~= (n + strcmp(opts.Circuit, 'on') - 1))
     error('E dimensions not compatible with V');
 end
+
 
 %================= Dependencies ====================
 
@@ -51,11 +49,15 @@ if exist('dubins') ~= 3
 end
 
 % ======================== Setup ============================
-PATH_COLOR = 'g';
+PATH_COLOR = opts.DubinsPathColor;
 
 % Normalization
 %V = normalizePoints(V);
-md = normalizationCoeff(V);
+if strcmp(opts.NormalizePlots, 'on')
+    md = normalizationCoeff(V);
+else
+    md = 1;
+end
 
 % Get waypoint order
 order = getVertexOrder(E);
@@ -65,8 +67,9 @@ order = getVertexOrder(E);
 position = V(1,:);
 heading = X(1);
 C_total = 0;
+pDubins = [];
 
-if strcmp(pathOptions.Debug,'on')
+if strcmp(opts.Debug,'on')
     vertexOrder = order;
 end
 
@@ -75,17 +78,23 @@ for i=2:(m+1)
     theta_0 = heading2angle(heading);
     q0 = [position(1:2) theta_0];
     vi = order(i); % get index of vertex in tour
-    if i < (m+1) || (i <= (m+1) && strcmp(pathOptions.Circuit,'off'))
+    if i < (m+1) || (i <= (m+1) && strcmp(opts.Circuit,'off'))
         theta_1 = heading2angle(X(vi));
         q1 = [V(vi,:) theta_1];
     else
-        % Return to start
-        theta_1 = heading2angle(X(1));
-        q1 = [V(1,:) theta_1];
+        % Return to start or first node
+        if (strcmp(opts.CircuitInitial,'on'))
+            theta_1 = heading2angle(X(1));
+            q1 = [V(1,:) theta_1];
+        else
+            theta_1 = heading2angle(X(order(2)));
+            q1 = [V(order(2),:) theta_1];
+        end
     end
-    path = dubins(q0, q1, pathOptions.TurnRadius, pathOptions.DubinsStepSize);
+    path = dubins(q0, q1, opts.TurnRadius, opts.DubinsStepSize);
+    pDubins = [pDubins; path(1,:)', path(2,:)'];
     
-    if strcmp(pathOptions.Debug,'on')
+    if strcmp(opts.Debug,'on')
         c = 0;
         for j=2:length(path)
             c_i = sqrt((path(1,j) - path(1,j-1))^2 + (path(2,j) - path(2,j-1))^2);
@@ -102,17 +111,20 @@ for i=2:(m+1)
     
     % Plot path
     hold on;
-    plot(path(1,1:end)/md,path(2,1:end)/md, 'Color', PATH_COLOR);
+    hPath = plot(path(1,1:end)/md,path(2,1:end)/md, 'Color', PATH_COLOR);
     hold off;
+
+    % Remove legend entries for duplicates
+    if (i > 2)
+        disableLegendEntry(hPath);
+    end
     
 end
 
 
-if strcmp(pathOptions.Debug,'on')
+if strcmp(opts.Debug,'on')
     fprintf('Simulated Dubins'' path with cost %0.2f\n', C_total);
 end
-
-% Plot waypoint headings
 
 % set(hAx,'DataAspectRatioMode', 'auto');
 % set(hAx,'PlotBoxAspectRatioMode', 'auto');
@@ -120,7 +132,8 @@ end
 % set(hAx,'DataAspectRatio', [1 1 1]);
 % set(hAx,'PlotBoxAspectRatio', [1 1 1]);
 
-plotWaypointHeadings(hAx, V./md, X, pathOptions);
-
+% Plot headings
+hAx = gca;
+plotWaypointHeadings(hAx, V./md, X, opts);
 
 end % function plotWaypointDubins

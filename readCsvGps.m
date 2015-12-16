@@ -31,6 +31,8 @@ rawData = csvread(filename, 1);
 timeInd = find(~cellfun(@isempty,(strfind(fields,'timestamp'))));
 
 % Get and convert from 1e7 (lat & lon) and 1e3 for altitude
+% Matrix pilot does use expected MAVLINK convention for altitude
+altScale = 1e2;
 if USE_RAW_GPS
 latInd = find(~cellfun(@isempty,(strfind(fields,'GPS_RAW_INT.lat'))));
 lonInd = find(~cellfun(@isempty,(strfind(fields,'GPS_RAW_INT.lon'))));
@@ -39,17 +41,18 @@ else
 latInd = find(~cellfun(@isempty,(strfind(fields,'GLOBAL_POSITION_INT.lat'))));
 lonInd = find(~cellfun(@isempty,(strfind(fields,'GLOBAL_POSITION_INT.lon'))));
 altInd = find(~cellfun(@isempty,(strfind(fields,'GLOBAL_POSITION_INT.alt'))));
+altScale = 1e3;
 end
 
 data = zeros(m,4);
 data(:,1) = rawData(:,timeInd);
 data(:,2) = rawData(:,latInd) / 1e7;
 data(:,3) = rawData(:,lonInd) / 1e7;
-data(:,4) = rawData(:,altInd) / 1e3;
+data(:,4) = rawData(:,altInd) / altScale;
 
 indGood = find(data(:,2)~=0);
-m_good = length(indGood);
-data=data(indGood,:);
+data=data(indGood(1):indGood(end),:);
+m_good = length(data);
 points=geopoint(data(:,2)',data(:,3)');
 
 fprintf('Cleaned data. Dropped %d rows from raw data.\n', (m-m_good));

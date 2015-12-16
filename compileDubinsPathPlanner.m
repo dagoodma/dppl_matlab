@@ -1,6 +1,6 @@
 % Compiles all DubinsPathPlanner (DPP) solvers
 % Settings
-COMPILE_DTSP=0;
+COMPILE_DTSP=1;
 COMPILE_CPP=1;
 COMPILE_CPP_AS_DTSP=1;
 DRY_RUN=0;

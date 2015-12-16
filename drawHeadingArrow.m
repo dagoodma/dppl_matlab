@@ -1,4 +1,4 @@
-function drawHeadingArrow(hAx, origin, psi, arrowSize, color, useQuiver)
+function [ha] = drawHeadingArrow(hAx, origin, psi, arrowSize, color, useQuiver)
 % DRAWHEADINGARROW draws an annotation arrow at the heading psi
 %
 % If useQuiver is set, the plot does not have to be normalized.
@@ -95,13 +95,15 @@ if (~useQuiver)
 
 	[oxf, oyf] = ds2nfu(hAx, ox, oy);
 	[pxf, pyf] = ds2nfu(hAx, px, py);
-	annotation('arrow', [oxf pxf], [oyf pyf], 'Color', color,...
+	ha = annotation('arrow', [oxf pxf], [oyf pyf], 'Color', color,...
 	   'HeadLength', headLength, 'HeadWidth', headWidth);
 else
 	u = arrowSize*cos(theta);
 	v = arrowSize*sin(theta);
-	qv = quiver(ox, oy, u, v, arrowSize, 'AutoScale', 'off', 'Color', color,...
+	hold on;
+	ha = quiver(ox, oy, u, v, arrowSize, 'AutoScale', 'off', 'Color', color,...
 	    'MaxHeadSize', 1e2);
+	hold off;
 end
 %set(qv,'MaxHeadSize',arrowSize/2);
 %set(qv,'Color', color);
